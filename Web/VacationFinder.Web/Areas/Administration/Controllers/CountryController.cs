@@ -53,13 +53,17 @@
                 list = list.Where(t => t.Name.Contains(name)).ToList();
             }
 
-            if (continent != null)
+            try
             {
-                list = list.
-                    Where(t => 
-                    t.Continent == (Continent)int.Parse(continent.Substring(0, 1)))
-                    .ToList();
+                if (continent != null)
+                {
+                    list = list.
+                        Where(t =>
+                        t.Continent == (Continent)int.Parse(continent.Substring(0, 1)))
+                        .ToList();
+                }
             }
+            catch { }
 
             return this.View(new IndexViewModel() { List = GetPage(list, pageNumber, pageSize), Pages = GetPageCount(list, pageSize) });
         }
