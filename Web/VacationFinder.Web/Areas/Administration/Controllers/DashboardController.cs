@@ -1,9 +1,8 @@
 ﻿namespace VacationFinder.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
     using VacationFinder.Services.Data;
     using VacationFinder.Web.ViewModels.Administration.Dashboard;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class DashboardController : AdministrationController
     {

@@ -1,8 +1,8 @@
 ﻿namespace VacationFinder.Data.Configurations
 {
-    using VacationFinder.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using VacationFinder.Data.Models;
 
     public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {

@@ -1,0 +1,168 @@
+﻿@model VacationFinder.Web.ViewModels.Administration.Tag.IndexViewModel;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-area="Administration"
+      asp-controller="Tag"
+      asp-action="Index" method="get">
+
+    Per Page:
+    <select name="perPage">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+    </select>
+
+    <button class="btn btn-primary" type="submit">Order</button>
+
+    <a class="btn btn-primary"
+       asp-area="Administration"
+       asp-controller="Tag"
+       asp-action="Index">
+        Clear
+    </a>
+</form>
+
+<form asp-area="Administration"
+      asp-controller="Tag"
+      asp-action="Index" method="get">
+    <label for="title">Title:</label>
+    <input type="text" name="title" />
+
+    <label for="sort">Sort:</label>
+    <input type="text" name="sort" />
+
+    <button class="btn btn-primary" type="submit">Filter</button>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-area="Administration"
+                   asp-controller="Tag"
+                   asp-action="Index"
+                   asp-route-order="title">
+                    @Html.DisplayNameFor(model => model.List.First().Title)
+                </a>
+            </th>
+            <th>
+                <a asp-area="Administration"
+                   asp-controller="Tag"
+                   asp-action="Index"
+                   asp-route-order="sort">
+                    @Html.DisplayNameFor(model => model.List.First().Sort)
+                </a>
+            </th>
+            <th>
+                <a asp-area="Administration"
+                   asp-controller="Tag"
+                   asp-action="Index"
+                   asp-route-order="isActive">
+                    @Html.DisplayNameFor(model => model.List.First().IsActive)
+                </a>
+            </th>
+            <th>
+                <a asp-area="Administration"
+                   asp-controller="Tag"
+                   asp-action="Index"
+                   asp-route-order="createdOn">
+                    @Html.DisplayNameFor(model => model.List.First().CreatedOn)
+                </a>
+            </th>
+            <th>
+                <a asp-area="Administration"
+                   asp-controller="Tag"
+                   asp-action="Index"
+                   asp-route-order="modifiedOn">
+                    @Html.DisplayNameFor(model => model.List.First().ModifiedOn)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.List)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sort)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModifiedOn)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@{
+    int currentPage = 1;
+    var perPage = HttpContextAccessor.HttpContext.Request.Query["perPage"];
+
+
+    try
+    {
+        currentPage = int.Parse(HttpContextAccessor.HttpContext.Request.Query["page"]);
+    }
+    catch { }
+}
+
+<div class="paginationUrls">
+        @if (currentPage != 1)
+        {
+
+            <a class="pageButtons"
+               asp-area="Administration"
+               asp-controller="Tag"
+               asp-action="Index"
+               asp-route-page="@(currentPage - 1)"
+               asp-route-perPage="@perPage">
+                previous
+            </a>
+
+        }
+        <div class="currentPage">
+            @currentPage
+        </div>
+            @if (currentPage != Model.Pages)
+            {
+
+                <a class="pageButtons"
+                   asp-area="Administration"
+                   asp-controller="Tag"
+                   asp-action="Index"
+                   asp-route-page="@(currentPage + 1)"
+                   asp-route-perPage="@perPage">
+                    next
+                </a>
+
+            }
+    </div>
