@@ -1,4 +1,4 @@
-﻿@model VacationFinder.Web.ViewModels.Administration.Transport.IndexViewModel;
+﻿@model VacationFinder.Web.ViewModels.Administration.Country.IndexViewModel;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 
 @{
@@ -6,19 +6,19 @@
 
     var routeData = new Dictionary<string, string>();
     routeData["order"] = "";
-    routeData["title"] = "";
-    routeData["sort"] = "";
+    routeData["name"] = "";
+    routeData["continent"] = "";
     foreach (var x in Context.Request.Query)
     {
         routeData[x.Key] = x.Value;
     }
 }
+
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
 <form asp-action="Index" method="get">
 
     Per Page:
@@ -28,29 +28,39 @@
         <option value="15">15</option>
     </select>
     <input type="hidden" name="order" value="@routeData["order"]" />
-    <input type="hidden" name="title" value="@routeData["title"]" />
-    <input type="hidden" name="sort" value="@routeData["sort"]" />
+    <input type="hidden" name="name" value="@routeData["name"]" />
+    <input type="hidden" name="continent" value="@routeData["continent"]" />
     <button class="btn btn-primary" type="submit">Paginate</button>
 
-    <a class="btn btn-primary"
-       asp-action="Index">
+    <a class="btn btn-primary" asp-action="Index">
         Clear
     </a>
 </form>
 
 <form asp-action="Index" method="get">
-    <label for="title">Title:</label>
-    <input type="text" name="title" />
+    <label for="name">Name:</label>
+    <input type="text" name="name" />
 
-    <label for="sort">Sort:</label>
-    <input type="text" name="sort" />
+    <label for="continent">Continent:</label>
+    <select name="continent" class="form-control">
+        <option value=""></option>
+        <option value="0">Unknown</option>
+        <option value="1">Europe</option>
+        <option value="2">Asia</option>
+        <option value="3">Africa</option>
+        <option value="4">North_America</option>
+        <option value="5">South_America</option>
+        <option value="6">Australia</option>
+    </select>
 
     <input type="hidden" name="order" value="@routeData["order"]" />
-    <input type="hidden" name="title" value="@routeData["title"]" />
-    <input type="hidden" name="sort" value="@routeData["sort"]" />
+    <input type="hidden" name="name" value="@routeData["name"]" />
+    <input type="hidden" name="continent" value="@routeData["continent"]" />
 
     <button class="btn btn-primary" type="submit">Filter</button>
 </form>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -58,21 +68,14 @@
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
                    asp-route-order="title">
-                    @Html.DisplayNameFor(model => model.List.First().Title)
+                    @Html.DisplayNameFor(model => model.List.First().Name)
                 </a>
             </th>
             <th>
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
-                   asp-route-order="sort">
-                    @Html.DisplayNameFor(model => model.List.First().Sort)
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index"
-                   asp-all-route-data="@routeData"
-                   asp-route-order="isActive">
-                    @Html.DisplayNameFor(model => model.List.First().IsActive)
+                   asp-route-order="continent">
+                    @Html.DisplayNameFor(model => model.List.First().Continent)
                 </a>
             </th>
             <th>
@@ -97,13 +100,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Sort)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
+                    @Html.DisplayFor(modelItem => item.Continent)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatedOn)
@@ -121,9 +121,6 @@
     </tbody>
 </table>
 
-<p>
-
-</p>
 
 @{
     int currentPage = 1;

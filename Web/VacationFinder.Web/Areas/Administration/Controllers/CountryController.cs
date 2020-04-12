@@ -9,36 +9,34 @@
     using Microsoft.EntityFrameworkCore;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
-    using VacationFinder.Web.ViewModels.Administration.Transport;
+    using VacationFinder.Data.Models.Enums;
+    using VacationFinder.Web.ViewModels.Administration.Country;
 
-    public class TransportController : AdministrationController
+    public class CountryController : AdministrationController
     {
         private readonly ApplicationDbContext _context;
 
-        public TransportController(ApplicationDbContext context)
+        public CountryController(ApplicationDbContext context)
         {
             this._context = context;
         }
 
-        public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? title, string? sort)
+        public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? name, string? continent)
         {
             int pageSize = perPage ?? 5;
             int pageNumber = page ?? 1;
 
-            var list = await this._context.Transports.ToListAsync();
+            var list = await this._context.Countries.ToListAsync();
 
             if (order != null)
             {
                 switch (order)
                 {
-                    case "title":
-                        list = list.OrderBy(t => t.Title).ToList();
+                    case "name":
+                        list = list.OrderBy(t => t.Name).ToList();
                         break;
-                    case "sort":
-                        list = list.OrderByDescending(t => t.Sort).ToList();
-                        break;
-                    case "isActive":
-                        list = list.OrderByDescending(t => t.IsActive).ToList();
+                    case "continent":
+                        list = list.OrderBy(t => t.Continent).ToList();
                         break;
                     case "createdOn":
                         list = list.OrderByDescending(t => t.CreatedOn).ToList();
@@ -50,14 +48,17 @@
 
             }
 
-            if (title != null)
+            if (name != null)
             {
-                list = list.Where(t => t.Title.Contains(title)).ToList();
+                list = list.Where(t => t.Name.Contains(name)).ToList();
             }
 
-            if (sort != null)
+            if (continent != null)
             {
-                list = list.Where(t => t.Sort == int.Parse(sort)).ToList();
+                list = list.
+                    Where(t => 
+                    t.Continent == (Continent)int.Parse(continent.Substring(0, 1)))
+                    .ToList();
             }
 
             return this.View(new IndexViewModel() { List = GetPage(list, pageNumber, pageSize), Pages = GetPageCount(list, pageSize) });
@@ -70,42 +71,42 @@
                 return this.NotFound();
             }
 
-            var transport = await this._context.Transports
+            var country = await this._context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (transport == null)
+            if (country == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            return this.View(country);
         }
 
-        // GET: Admin/Transport/Create
+        // GET: Admin/Country/Create
         public IActionResult Create()
         {
             return this.View();
         }
 
-        // POST: Admin/Transport/Create
+        // POST: Admin/Country/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Sort,Id,IsActive")] Transport transport)
+        public async Task<IActionResult> Create([Bind("Name,Continent,Id")] Country country)
         {
-            transport.CreatedOn = DateTime.Now.AddHours(-3);
-            transport.IsDeleted = false;
+            country.CreatedOn = DateTime.Now.AddHours(-3);
+            country.IsDeleted = false;
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(transport);
+                this._context.Add(country);
                 await this._context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
-            return this.View(transport);
+            return this.View(country);
         }
 
-        // GET: Admin/Transport/Edit/5
+        // GET: Admin/Country/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,24 +114,24 @@
                 return this.NotFound();
             }
 
-            var transport = await this._context.Transports.FindAsync(id);
-            if (transport == null)
+            var country = await this._context.Countries.FindAsync(id);
+            if (country == null)
             {
                 return this.NotFound();
             }
-            return this.View(transport);
+            return this.View(country);
         }
 
-        // POST: Admin/Transport/Edit/5
+        // POST: Admin/Country/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Sort,Id,IsActive")] Transport transport)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Continent,Id")] Country country)
         {
 
 
-            if (id != transport.Id)
+            if (id != country.Id)
             {
                 return this.NotFound();
             }
@@ -139,12 +140,12 @@
             {
                 try
                 {
-                    this._context.Update(transport);
+                    this._context.Update(country);
                     await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.TransportExists(transport.Id))
+                    if (!this.CountryExists(country.Id))
                     {
                         return this.NotFound();
                     }
@@ -157,10 +158,10 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(transport);
+            return this.View(country);
         }
 
-        // GET: Admin/Transport/Delete/5
+        // GET: Admin/Country/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -168,47 +169,47 @@
                 return this.NotFound();
             }
 
-            var transport = await this._context.Transports
+            var country = await this._context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (transport == null)
+            if (country == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            return this.View(country);
         }
 
-        // POST: Admin/Transport/Delete/5
+        // POST: Admin/Country/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transport = await this._context.Transports.FindAsync(id);
-            transport.IsDeleted = true;
-            transport.DeletedOn = DateTime.Now.AddHours(-3);
+            var country = await this._context.Countries.FindAsync(id);
+            country.IsDeleted = true;
+            country.DeletedOn = DateTime.Now.AddHours(-3);
             await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        private bool TransportExists(int id)
+        private bool CountryExists(int id)
         {
-            return this._context.Transports.Any(e => e.Id == id);
+            return this._context.Countries.Any(e => e.Id == id);
         }
 
-        private static IEnumerable<Transport> GetPage(IEnumerable<Transport> list, int pageNumber, int pageSize = 10)
+        private static IEnumerable<Country> GetPage(IEnumerable<Country> list, int pageNumber, int pageSize = 10)
         {
             return list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        private static int GetPageCount(IEnumerable<Transport> list, int pageSize = 10)
+        private static int GetPageCount(IEnumerable<Country> list, int pageSize = 10)
         {
             int count = list.Count();
+
             if (count == 0)
             {
                 return 1;
             }
-
 
             if (count % pageSize == 0)
             {
@@ -217,5 +218,7 @@
 
             return (count / pageSize) + 1;
         }
+
+
     }
 }
