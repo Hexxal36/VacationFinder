@@ -1,4 +1,4 @@
-﻿namespace VacationFinder.Web.ViewModels.Administration.Tag
+﻿namespace VacationFinder.Web.ViewModels.Administration.Transport
 {
     using System.Collections.Generic;
 
@@ -6,7 +6,7 @@
 
     public class IndexViewModel
     {
-        public IEnumerable<Tag> List { get; set; }
+        public IEnumerable<Transport> List { get; set; }
 
         public int Pages { get; set; }
     }

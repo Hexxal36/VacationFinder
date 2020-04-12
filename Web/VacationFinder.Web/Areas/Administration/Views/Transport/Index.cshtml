@@ -1,4 +1,4 @@
-﻿@model VacationFinder.Web.ViewModels.Administration.Tag.IndexViewModel;
+﻿@model VacationFinder.Web.ViewModels.Administration.Transport.IndexViewModel;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 
 @{
@@ -13,12 +13,12 @@
         routeData[x.Key] = x.Value;
     }
 }
-
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <form asp-action="Index" method="get">
 
     Per Page:
@@ -32,7 +32,8 @@
     <input type="hidden" name="sort" value="@routeData["sort"]" />
     <button class="btn btn-primary" type="submit">Paginate</button>
 
-    <a class="btn btn-primary" asp-action="Index">
+    <a class="btn btn-primary"
+       asp-action="Index">
         Clear
     </a>
 </form>
@@ -50,8 +51,6 @@
 
     <button class="btn btn-primary" type="submit">Filter</button>
 </form>
-
-
 <table class="table">
     <thead>
         <tr>
@@ -129,7 +128,7 @@
 @{
     int currentPage = 1;
     var perPage = HttpContextAccessor.HttpContext.Request.Query["perPage"];
-    
+
 
     try
     {

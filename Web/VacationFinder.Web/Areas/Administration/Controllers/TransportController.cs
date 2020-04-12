@@ -9,13 +9,13 @@
     using Microsoft.EntityFrameworkCore;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
-    using VacationFinder.Web.ViewModels.Administration.Tag;
+    using VacationFinder.Web.ViewModels.Administration.Transport;
 
-    public class TagController : AdministrationController
+    public class TransportController : AdministrationController
     {
         private readonly ApplicationDbContext _context;
 
-        public TagController(ApplicationDbContext context)
+        public TransportController(ApplicationDbContext context)
         {
             this._context = context;
         }
@@ -25,7 +25,7 @@
             int pageSize = perPage ?? 5;
             int pageNumber = page ?? 1;
 
-            var list = await this._context.Tags.ToListAsync();
+            var list = await this._context.Transports.ToListAsync();
 
             if (order != null)
             {
@@ -54,6 +54,7 @@
             {
                 list = list.Where(t => t.Title.Contains(title)).ToList();
             }
+
             if (sort != null)
             {
                 list = list.Where(t => t.Sort == int.Parse(sort)).ToList();
@@ -69,42 +70,42 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags
+            var transport = await this._context.Transports
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (tag == null)
+            if (transport == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(tag);
+            return this.View(transport);
         }
 
-        // GET: Admin/Tag/Create
+        // GET: Admin/Transport/Create
         public IActionResult Create()
         {
             return this.View();
         }
 
-        // POST: Admin/Tag/Create
+        // POST: Admin/Transport/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Sort,Id,IsActive")] Tag tag)
+        public async Task<IActionResult> Create([Bind("Title,Sort,Id,IsActive")] Transport transport)
         {
-            tag.CreatedOn = DateTime.Now.AddHours(-3);
-            tag.IsDeleted = false;
+            transport.CreatedOn = DateTime.Now.AddHours(-3);
+            transport.IsDeleted = false;
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(tag);
+                this._context.Add(transport);
                 await this._context.SaveChangesAsync();
-                return this.RedirectToAction(nameof(this.Create));
+                return this.RedirectToAction(nameof(this.Index));
             }
-            return this.View(tag);
+            return this.View(transport);
         }
 
-        // GET: Admin/Tag/Edit/5
+        // GET: Admin/Transport/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -112,24 +113,24 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags.FindAsync(id);
-            if (tag == null)
+            var transport = await this._context.Transports.FindAsync(id);
+            if (transport == null)
             {
                 return this.NotFound();
             }
-            return this.View(tag);
+            return this.View(transport);
         }
 
-        // POST: Admin/Tag/Edit/5
+        // POST: Admin/Transport/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Sort,Id,IsActive")] Tag tag)
+        public async Task<IActionResult> Edit(int id, [Bind("Title,Sort,Id,IsActive")] Transport transport)
         {
 
 
-            if (id != tag.Id)
+            if (id != transport.Id)
             {
                 return this.NotFound();
             }
@@ -138,12 +139,12 @@
             {
                 try
                 {
-                    this._context.Update(tag);
+                    this._context.Update(transport);
                     await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.TagExists(tag.Id))
+                    if (!this.TransportExists(transport.Id))
                     {
                         return this.NotFound();
                     }
@@ -156,10 +157,10 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(tag);
+            return this.View(transport);
         }
 
-        // GET: Admin/Tag/Delete/5
+        // GET: Admin/Transport/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -167,47 +168,47 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags
+            var transport = await this._context.Transports
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (tag == null)
+            if (transport == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(tag);
+            return this.View(transport);
         }
 
-        // POST: Admin/Tag/Delete/5
+        // POST: Admin/Transport/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tag = await this._context.Tags.FindAsync(id);
-            tag.IsDeleted = true;
-            tag.DeletedOn = DateTime.Now.AddHours(-3);
+            var transport = await this._context.Transports.FindAsync(id);
+            transport.IsDeleted = true;
+            transport.DeletedOn = DateTime.Now.AddHours(-3);
             await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        private bool TagExists(int id)
+        private bool TransportExists(int id)
         {
-            return this._context.Tags.Any(e => e.Id == id);
+            return this._context.Transports.Any(e => e.Id == id);
         }
 
-        private static IEnumerable<Tag> GetPage(IEnumerable<Tag> list, int pageNumber, int pageSize = 10)
+        private static IEnumerable<Transport> GetPage(IEnumerable<Transport> list, int pageNumber, int pageSize = 10)
         {
             return list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        private static int GetPageCount(IEnumerable<Tag> list, int pageSize = 10)
+        private static int GetPageCount(IEnumerable<Transport> list, int pageSize = 10)
         {
             int count = list.Count();
-
             if (count == 0)
             {
                 return 1;
             }
+
 
             if (count % pageSize == 0)
             {
@@ -216,7 +217,5 @@
 
             return (count / pageSize) + 1;
         }
-
-
     }
 }

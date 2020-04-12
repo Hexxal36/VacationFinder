@@ -27,6 +27,8 @@
 
         public DbSet<Tag> Tags { get; set; }
 
+        public DbSet<Transport> Transports { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
