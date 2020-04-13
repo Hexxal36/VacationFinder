@@ -3,12 +3,11 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Mvc;
     using VacationFinder.Data.Common.Repositories;
     using VacationFinder.Data.Models;
     using VacationFinder.Services.Data;
     using VacationFinder.Web.ViewModels.Settings;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class SettingsController : BaseController
     {

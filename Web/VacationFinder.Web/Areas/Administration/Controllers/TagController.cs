@@ -13,22 +13,24 @@
 
     public class TagController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         private readonly IPagingService pagingService;
 
         public TagController(ApplicationDbContext context)
         {
-            this._context = context;
+            this.context = context;
             this.pagingService = new PagingService();
         }
+
+        #nullable enable
 
         public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? title, string? sort)
         {
             int pageSize = perPage ?? 5;
             int pageNumber = page ?? 1;
 
-            var list = await this._context.Tags.ToListAsync();
+            var list = await this.context.Tags.ToListAsync();
 
             if (order != null)
             {
@@ -50,7 +52,6 @@
                         list = list.OrderByDescending(t => t.ModifiedOn).ToList();
                         break;
                 }
-
             }
 
             if (title != null)
@@ -81,7 +82,7 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags
+            var tag = await this.context.Tags
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -98,7 +99,7 @@
         }
 
         // POST: Admin/Tag/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,10 +110,11 @@
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(tag);
-                await this._context.SaveChangesAsync();
+                this.context.Add(tag);
+                await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
+
             return this.View(tag);
         }
 
@@ -124,23 +126,22 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags.FindAsync(id);
+            var tag = await this.context.Tags.FindAsync(id);
             if (tag == null)
             {
                 return this.NotFound();
             }
+
             return this.View(tag);
         }
 
         // POST: Admin/Tag/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Title,Sort,Id,IsActive")] Tag tag)
         {
-
-
             if (id != tag.Id)
             {
                 return this.NotFound();
@@ -150,8 +151,8 @@
             {
                 try
                 {
-                    this._context.Update(tag);
-                    await this._context.SaveChangesAsync();
+                    this.context.Update(tag);
+                    await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -179,7 +180,7 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags
+            var tag = await this.context.Tags
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -195,16 +196,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tag = await this._context.Tags.FindAsync(id);
+            var tag = await this.context.Tags.FindAsync(id);
             tag.IsDeleted = true;
             tag.DeletedOn = DateTime.Now.AddHours(-3);
-            await this._context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool TagExists(int id)
         {
-            return this._context.Tags.Any(e => e.Id == id);
+            return this.context.Tags.Any(e => e.Id == id);
         }
     }
 }

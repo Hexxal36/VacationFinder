@@ -1,25 +1,26 @@
-﻿@model IEnumerable<VacationFinder.Data.Models.Transport>;
+﻿@model IEnumerable<VacationFinder.Data.Models.Hotel>
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 
 @{
-    ViewData["Title"] = "Transport";
+    ViewData["Title"] = "Tag";
 
     var routeData = new Dictionary<string, string>();
     routeData["order"] = "";
-    routeData["title"] = "";
-    routeData["sort"] = "";
+    routeData["name"] = "";
+    routeData["stars"] = "";
+    routeData["city"] = "";
     routeData["perPage"] = "";
     foreach (var x in Context.Request.Query)
     {
         routeData[x.Key] = x.Value;
     }
 }
+
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
 <form asp-action="Index" method="get">
 
     Per Page:
@@ -31,43 +32,59 @@
 
     <input type="hidden" name="order" value="@routeData["perPage"]" />
     <input type="hidden" name="order" value="@routeData["order"]" />
-    <input type="hidden" name="title" value="@routeData["title"]" />
-    <input type="hidden" name="sort" value="@routeData["sort"]" />
+    <input type="hidden" name="title" value="@routeData["name"]" />
+    <input type="hidden" name="sort" value="@routeData["stars"]" />
+    <input type="hidden" name="sort" value="@routeData["city"]" />
     <button class="btn btn-primary" type="submit">Paginate</button>
 
-    <a class="btn btn-primary"
-       asp-action="Index">
+    <a class="btn btn-primary" asp-action="Index">
         Clear
     </a>
 </form>
 
 <form asp-action="Index" method="get">
-    <label for="title">Title:</label>
-    <input type="text" name="title" />
+    <label for="name">Name:</label>
+    <input type="text" name="name" />
 
-    <label for="sort">Sort:</label>
-    <input type="text" name="sort" />
+    <label for="stars">Stars:</label>
+    <select name="stars">
+        <option></option>
+        @for (int i = 1; i <= 5; i++)
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+
+    <label for="city">City:</label>
+    <select name="city">
+        <option></option>
+        @foreach (var city in ViewBag.Cities)
+        {
+            <option value="@city.Id">@city.Name</option>
+        }
+    </select>
 
     <input type="hidden" name="order" value="@routeData["order"]" />
     <input type="hidden" name="order" value="@routeData["perPage"]" />
 
     <button class="btn btn-primary" type="submit">Filter</button>
 </form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
-                   asp-route-order="title">
-                    @Html.DisplayNameFor(model => model.Title)
+                   asp-route-order="name">
+                    @Html.DisplayNameFor(model => model.Name)
                 </a>
             </th>
             <th>
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
-                   asp-route-order="sort">
-                    @Html.DisplayNameFor(model => model.Sort)
+                   asp-route-order="stars">
+                    @Html.DisplayNameFor(model => model.Stars)
                 </a>
             </th>
             <th>
@@ -75,6 +92,13 @@
                    asp-all-route-data="@routeData"
                    asp-route-order="isActive">
                     @Html.DisplayNameFor(model => model.IsActive)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-all-route-data="@routeData"
+                   asp-route-order="city">
+                    @Html.DisplayNameFor(model => model.City)
                 </a>
             </th>
             <th>
@@ -99,13 +123,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Sort)
+                    @Html.DisplayFor(modelItem => item.Stars)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatedOn)
@@ -123,9 +150,7 @@
     </tbody>
 </table>
 
-<p>
 
-</p>
 
 @{
     int currentPage = 1;

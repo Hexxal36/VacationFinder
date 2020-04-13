@@ -2,9 +2,8 @@
 {
     using System.Linq;
 
-    using VacationFinder.Data.Common.Models;
-
     using Microsoft.EntityFrameworkCore;
+    using VacationFinder.Data.Common.Models;
 
     internal static class EntityIndexesConfiguration
     {

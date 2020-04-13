@@ -11,36 +11,39 @@
     using VacationFinder.Data.Models;
     using VacationFinder.Services;
 
-    public class TransportController : AdministrationController
+    public class HotelController : AdministrationController
     {
         private readonly ApplicationDbContext context;
 
         private readonly IPagingService pagingService;
 
-        public TransportController(ApplicationDbContext context)
+        public HotelController(ApplicationDbContext context)
         {
             this.context = context;
             this.pagingService = new PagingService();
         }
 
-        #nullable enable
+#nullable enable
 
-        public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? title, string? sort)
+        public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? name, string? city, string? stars)
         {
             int pageSize = perPage ?? 5;
             int pageNumber = page ?? 1;
 
-            var list = await this.context.Transports.ToListAsync();
+            var list = await this.context.Hotels.ToListAsync();
 
             if (order != null)
             {
                 switch (order)
                 {
-                    case "title":
-                        list = list.OrderBy(t => t.Title).ToList();
+                    case "name":
+                        list = list.OrderBy(t => t.Name).ToList();
                         break;
-                    case "sort":
-                        list = list.OrderByDescending(t => t.Sort).ToList();
+                    case "city":
+                        list = list.OrderBy(t => t.City.Name).ToList();
+                        break;
+                    case "stars":
+                        list = list.OrderByDescending(t => t.Stars).ToList();
                         break;
                     case "isActive":
                         list = list.OrderByDescending(t => t.IsActive).ToList();
@@ -54,25 +57,32 @@
                 }
             }
 
-            if (title != null)
+            if (name != null)
             {
-                list = list.Where(t => t.Title.Contains(title)).ToList();
+                list = list.Where(t => t.Name.Contains(name)).ToList();
             }
 
             try
             {
-                if (sort != null)
+                if (city != null)
                 {
-                    list = list.Where(t => t.Sort == int.Parse(sort)).ToList();
+                    list = list.Where(t => t.City.Id == int.Parse(city)).ToList();
+                }
+
+                if (stars != null)
+                {
+                    list = list.Where(t => t.Stars == int.Parse(stars)).ToList();
                 }
             }
             catch
             {
             }
 
+            this.ViewBag.Cities = await this.context.Cities.ToListAsync();
+
             this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
 
-            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<Transport>().ToList());
+            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<Hotel>().ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -82,43 +92,45 @@
                 return this.NotFound();
             }
 
-            var transport = await this.context.Transports
+            var hotel = await this.context.Hotels
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (transport == null)
+            if (hotel == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            return this.View(hotel);
         }
 
-        // GET: Admin/Transport/Create
-        public IActionResult Create()
+        // GET: Admin/Hotel/Create
+        public async Task<IActionResult> Create()
         {
+            this.ViewBag.Cities = await this.context.Cities.ToListAsync();
+
             return this.View();
         }
 
-        // POST: Admin/Transport/Create
+        // POST: Admin/Hotel/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Sort,Id,IsActive")] Transport transport)
+        public async Task<IActionResult> Create([Bind("Name,Stars,ImageUrl,Id,IsActive,Description,CityId")] Hotel hotel)
         {
-            transport.CreatedOn = DateTime.Now.AddHours(-3);
-            transport.IsDeleted = false;
+            hotel.CreatedOn = DateTime.Now.AddHours(-3);
+            hotel.IsDeleted = false;
 
             if (this.ModelState.IsValid)
             {
-                this.context.Add(transport);
+                this.context.Add(hotel);
                 await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
-            return this.View(transport);
+            return this.View(hotel);
         }
 
-        // GET: Admin/Transport/Edit/5
+        // GET: Admin/Hotel/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,23 +138,25 @@
                 return this.NotFound();
             }
 
-            var transport = await this.context.Transports.FindAsync(id);
-            if (transport == null)
+            var hotel = await this.context.Hotels.FindAsync(id);
+            if (hotel == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            this.ViewBag.Cities = await this.context.Cities.ToListAsync();
+
+            return this.View(hotel);
         }
 
-        // POST: Admin/Transport/Edit/5
+        // POST: Admin/Hotel/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Sort,Id,IsActive")] Transport transport)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Stars,ImageUrl,Id,IsActive,Description,CityId")] Hotel hotel)
         {
-            if (id != transport.Id)
+            if (id != hotel.Id)
             {
                 return this.NotFound();
             }
@@ -151,12 +165,12 @@
             {
                 try
                 {
-                    this.context.Update(transport);
+                    this.context.Update(hotel);
                     await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.TransportExists(transport.Id))
+                    if (!this.HotelExists(hotel.Id))
                     {
                         return this.NotFound();
                     }
@@ -169,10 +183,10 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(transport);
+            return this.View(hotel);
         }
 
-        // GET: Admin/Transport/Delete/5
+        // GET: Admin/Hotel/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,32 +194,32 @@
                 return this.NotFound();
             }
 
-            var transport = await this.context.Transports
+            Hotel hotel = await this.context.Hotels
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (transport == null)
+            if (hotel == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            return this.View(hotel);
         }
 
-        // POST: Admin/Transport/Delete/5
+        // POST: Admin/Hotel/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transport = await this.context.Transports.FindAsync(id);
-            transport.IsDeleted = true;
-            transport.DeletedOn = DateTime.Now.AddHours(-3);
+            var hotel = await this.context.Hotels.FindAsync(id);
+            hotel.IsDeleted = true;
+            hotel.DeletedOn = DateTime.Now.AddHours(-3);
             await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        private bool TransportExists(int id)
+        private bool HotelExists(int id)
         {
-            return this.context.Transports.Any(e => e.Id == id);
+            return this.context.Hotels.Any(e => e.Id == id);
         }
     }
 }

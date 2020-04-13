@@ -1,9 +1,8 @@
 ﻿namespace VacationFinder.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using VacationFinder.Data.Models;
     using VacationFinder.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

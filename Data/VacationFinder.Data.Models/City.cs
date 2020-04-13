@@ -9,6 +9,11 @@
 
     public class City : BaseDeletableModel<int>
     {
+        public City()
+        {
+            this.Hotels = new HashSet<Hotel>();
+        }
+
         [Required]
         public string Name { get; set; }
 
@@ -17,5 +22,7 @@
 
         [ForeignKey("CountryId")]
         public virtual Country Country { get; set; }
+
+        public virtual ICollection<Hotel> Hotels { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using VacationFinder.Data.Common.Models;
 
     public class PagingService : IPagingService
@@ -18,7 +19,6 @@
             {
                 return 1;
             }
-
 
             if (count % pageSize == 0)
             {

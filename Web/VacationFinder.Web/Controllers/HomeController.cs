@@ -2,9 +2,8 @@
 {
     using System.Diagnostics;
 
-    using VacationFinder.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+    using VacationFinder.Web.ViewModels;
 
     public class HomeController : BaseController
     {

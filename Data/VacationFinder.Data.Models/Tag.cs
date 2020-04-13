@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using VacationFinder.Data.Common.Models;
 
     public class Tag : BaseDeletableModel<int>

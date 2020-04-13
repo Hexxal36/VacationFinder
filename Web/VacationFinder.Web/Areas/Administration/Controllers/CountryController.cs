@@ -14,22 +14,24 @@
 
     public class CountryController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         private readonly IPagingService pagingService;
 
         public CountryController(ApplicationDbContext context)
         {
-            this._context = context;
+            this.context = context;
             this.pagingService = new PagingService();
         }
+
+        #nullable enable
 
         public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? name, string? continent)
         {
             int pageSize = perPage ?? 5;
             int pageNumber = page ?? 1;
 
-            var list = await this._context.Countries.ToListAsync();
+            var list = await this.context.Countries.ToListAsync();
 
             if (order != null)
             {
@@ -48,7 +50,6 @@
                         list = list.OrderByDescending(t => t.ModifiedOn).ToList();
                         break;
                 }
-
             }
 
             if (name != null)
@@ -66,7 +67,9 @@
                         .ToList();
                 }
             }
-            catch { }
+            catch
+            {
+            }
 
             this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
 
@@ -80,7 +83,7 @@
                 return this.NotFound();
             }
 
-            var country = await this._context.Countries
+            var country = await this.context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (country == null)
             {
@@ -97,7 +100,7 @@
         }
 
         // POST: Admin/Country/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -108,10 +111,11 @@
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(country);
-                await this._context.SaveChangesAsync();
+                this.context.Add(country);
+                await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
+
             return this.View(country);
         }
 
@@ -123,23 +127,22 @@
                 return this.NotFound();
             }
 
-            var country = await this._context.Countries.FindAsync(id);
+            var country = await this.context.Countries.FindAsync(id);
             if (country == null)
             {
                 return this.NotFound();
             }
+
             return this.View(country);
         }
 
         // POST: Admin/Country/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Continent,Id")] Country country)
         {
-
-
             if (id != country.Id)
             {
                 return this.NotFound();
@@ -149,8 +152,8 @@
             {
                 try
                 {
-                    this._context.Update(country);
-                    await this._context.SaveChangesAsync();
+                    this.context.Update(country);
+                    await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -178,7 +181,7 @@
                 return this.NotFound();
             }
 
-            var country = await this._context.Countries
+            var country = await this.context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (country == null)
             {
@@ -194,16 +197,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var country = await this._context.Countries.FindAsync(id);
+            var country = await this.context.Countries.FindAsync(id);
             country.IsDeleted = true;
             country.DeletedOn = DateTime.Now.AddHours(-3);
-            await this._context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool CountryExists(int id)
         {
-            return this._context.Countries.Any(e => e.Id == id);
+            return this.context.Countries.Any(e => e.Id == id);
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace VacationFinder.Data.Migrations
+﻿namespace VacationFinder.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class CreatedCities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +20,7 @@ namespace VacationFinder.Data.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     CountryId = table.Column<int>(nullable: false),
-                    CityId = table.Column<int>(nullable: true)
+                    CityId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {

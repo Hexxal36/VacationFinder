@@ -4,9 +4,8 @@ namespace VacationFinder.Data.Models
     using System;
     using System.Collections.Generic;
 
-    using VacationFinder.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using VacationFinder.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {

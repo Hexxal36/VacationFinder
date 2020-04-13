@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace VacationFinder.Data.Migrations
+﻿namespace VacationFinder.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class CreatedTransports : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +21,7 @@ namespace VacationFinder.Data.Migrations
                     Title = table.Column<string>(nullable: false),
                     Sort = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    TransportId = table.Column<int>(nullable: true)
+                    TransportId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {

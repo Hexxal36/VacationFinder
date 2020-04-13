@@ -13,22 +13,24 @@
 
     public class CityController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         private readonly IPagingService pagingService;
 
         public CityController(ApplicationDbContext context)
         {
-            this._context = context;
+            this.context = context;
             this.pagingService = new PagingService();
         }
+
+        #nullable enable
 
         public async Task<IActionResult> Index(int? page, int? perPage, string? country, string? name, string? order)
         {
             int pageSize = perPage ?? 5;
             int pageNumber = page ?? 1;
 
-            var list = await this._context.Cities.ToListAsync();
+            var list = await this.context.Cities.ToListAsync();
 
             if (order != null)
             {
@@ -47,7 +49,6 @@
                         list = list.OrderByDescending(t => t.ModifiedOn).ToList();
                         break;
                 }
-
             }
 
             if (name != null)
@@ -62,10 +63,12 @@
                     list = list.Where(t => t.CountryId == int.Parse(country)).ToList();
                 }
             }
-            catch { }
+            catch
+            {
+            }
 
             this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
-            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
+            this.ViewBag.Countries = await this.context.Countries.ToListAsync();
 
             return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<City>().ToList());
         }
@@ -77,7 +80,7 @@
                 return this.NotFound();
             }
 
-            var city = await this._context.Cities
+            var city = await this.context.Cities
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (city == null)
             {
@@ -90,13 +93,13 @@
         // GET: Admin/City/Create
         public async Task<IActionResult> Create()
         {
-            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
+            this.ViewBag.Countries = await this.context.Countries.ToListAsync();
 
             return this.View();
         }
 
         // POST: Admin/City/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -107,8 +110,8 @@
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(city);
-                await this._context.SaveChangesAsync();
+                this.context.Add(city);
+                await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
@@ -123,19 +126,19 @@
                 return this.NotFound();
             }
 
-            var City = await this._context.Cities.FindAsync(id);
-            if (City == null)
+            var city = await this.context.Cities.FindAsync(id);
+            if (city == null)
             {
                 return this.NotFound();
             }
 
-            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
+            this.ViewBag.Countries = await this.context.Countries.ToListAsync();
 
-            return this.View(City);
+            return this.View(city);
         }
 
         // POST: Admin/City/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -150,8 +153,8 @@
             {
                 try
                 {
-                    this._context.Update(city);
-                    await this._context.SaveChangesAsync();
+                    this.context.Update(city);
+                    await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -179,14 +182,14 @@
                 return this.NotFound();
             }
 
-            var City = await this._context.Cities
+            var city = await this.context.Cities
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (City == null)
+            if (city == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(City);
+            return this.View(city);
         }
 
         // POST: Admin/City/Delete/5
@@ -195,16 +198,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var City = await this._context.Cities.FindAsync(id);
-            City.IsDeleted = true;
-            City.DeletedOn = DateTime.Now.AddHours(-3);
-            await this._context.SaveChangesAsync();
+            var city = await this.context.Cities.FindAsync(id);
+            city.IsDeleted = true;
+            city.DeletedOn = DateTime.Now.AddHours(-3);
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool CityExists(int id)
         {
-            return this._context.Cities.Any(e => e.Id == id);
+            return this.context.Cities.Any(e => e.Id == id);
         }
     }
 }

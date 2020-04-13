@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace VacationFinder.Data.Migrations
+﻿namespace VacationFinder.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class FixedForeignKeys : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
