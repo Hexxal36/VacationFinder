@@ -10,15 +10,18 @@
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
     using VacationFinder.Data.Models.Enums;
-    using VacationFinder.Web.ViewModels.Administration.Country;
+    using VacationFinder.Services;
 
     public class CountryController : AdministrationController
     {
         private readonly ApplicationDbContext _context;
 
+        private readonly IPagingService pagingService;
+
         public CountryController(ApplicationDbContext context)
         {
             this._context = context;
+            this.pagingService = new PagingService();
         }
 
         public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? name, string? continent)
@@ -65,7 +68,9 @@
             }
             catch { }
 
-            return this.View(new IndexViewModel() { List = GetPage(list, pageNumber, pageSize), Pages = GetPageCount(list, pageSize) });
+            this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
+
+            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<Country>().ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -200,29 +205,5 @@
         {
             return this._context.Countries.Any(e => e.Id == id);
         }
-
-        private static IEnumerable<Country> GetPage(IEnumerable<Country> list, int pageNumber, int pageSize = 10)
-        {
-            return list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-        }
-
-        private static int GetPageCount(IEnumerable<Country> list, int pageSize = 10)
-        {
-            int count = list.Count();
-
-            if (count == 0)
-            {
-                return 1;
-            }
-
-            if (count % pageSize == 0)
-            {
-                return count / pageSize;
-            }
-
-            return (count / pageSize) + 1;
-        }
-
-
     }
 }

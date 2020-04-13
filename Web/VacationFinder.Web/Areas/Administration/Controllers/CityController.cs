@@ -11,37 +11,34 @@
     using VacationFinder.Data.Models;
     using VacationFinder.Services;
 
-    public class TagController : AdministrationController
+    public class CityController : AdministrationController
     {
         private readonly ApplicationDbContext _context;
 
         private readonly IPagingService pagingService;
 
-        public TagController(ApplicationDbContext context)
+        public CityController(ApplicationDbContext context)
         {
             this._context = context;
             this.pagingService = new PagingService();
         }
 
-        public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? title, string? sort)
+        public async Task<IActionResult> Index(int? page, int? perPage, string? country, string? name, string? order)
         {
             int pageSize = perPage ?? 5;
             int pageNumber = page ?? 1;
 
-            var list = await this._context.Tags.ToListAsync();
+            var list = await this._context.Cities.ToListAsync();
 
             if (order != null)
             {
                 switch (order)
                 {
-                    case "title":
-                        list = list.OrderBy(t => t.Title).ToList();
+                    case "name":
+                        list = list.OrderBy(t => t.Name).ToList();
                         break;
-                    case "sort":
-                        list = list.OrderByDescending(t => t.Sort).ToList();
-                        break;
-                    case "isActive":
-                        list = list.OrderByDescending(t => t.IsActive).ToList();
+                    case "country":
+                        list = list.OrderBy(t => t.Country.Name).ToList();
                         break;
                     case "createdOn":
                         list = list.OrderByDescending(t => t.CreatedOn).ToList();
@@ -53,25 +50,24 @@
 
             }
 
-            if (title != null)
+            if (name != null)
             {
-                list = list.Where(t => t.Title.Contains(title)).ToList();
+                list = list.Where(t => t.Name.Contains(name)).ToList();
             }
 
             try
             {
-                if (sort != null)
+                if (country != null)
                 {
-                    list = list.Where(t => t.Sort == int.Parse(sort)).ToList();
+                    list = list.Where(t => t.CountryId == int.Parse(country)).ToList();
                 }
             }
-            catch
-            {
-            }
+            catch { }
 
             this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
+            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
 
-            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<Tag>().ToList());
+            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<City>().ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -81,42 +77,45 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags
+            var city = await this._context.Cities
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (tag == null)
+            if (city == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(tag);
+            return this.View(city);
         }
 
-        // GET: Admin/Tag/Create
-        public IActionResult Create()
+        // GET: Admin/City/Create
+        public async Task<IActionResult> Create()
         {
+            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
+
             return this.View();
         }
 
-        // POST: Admin/Tag/Create
+        // POST: Admin/City/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Sort,Id,IsActive")] Tag tag)
+        public async Task<IActionResult> Create([Bind("Name,CountryId,Id,")] City city)
         {
-            tag.CreatedOn = DateTime.Now.AddHours(-3);
-            tag.IsDeleted = false;
+            city.CreatedOn = DateTime.Now.AddHours(-3);
+            city.IsDeleted = false;
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(tag);
+                this._context.Add(city);
                 await this._context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
-            return this.View(tag);
+
+            return this.View(city);
         }
 
-        // GET: Admin/Tag/Edit/5
+        // GET: Admin/City/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -124,24 +123,25 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags.FindAsync(id);
-            if (tag == null)
+            var City = await this._context.Cities.FindAsync(id);
+            if (City == null)
             {
                 return this.NotFound();
             }
-            return this.View(tag);
+
+            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
+
+            return this.View(City);
         }
 
-        // POST: Admin/Tag/Edit/5
+        // POST: Admin/City/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Sort,Id,IsActive")] Tag tag)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,CountryId,Id,")] City city)
         {
-
-
-            if (id != tag.Id)
+            if (id != city.Id)
             {
                 return this.NotFound();
             }
@@ -150,12 +150,12 @@
             {
                 try
                 {
-                    this._context.Update(tag);
+                    this._context.Update(city);
                     await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.TagExists(tag.Id))
+                    if (!this.CityExists(city.Id))
                     {
                         return this.NotFound();
                     }
@@ -168,10 +168,10 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(tag);
+            return this.View(city);
         }
 
-        // GET: Admin/Tag/Delete/5
+        // GET: Admin/City/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -179,32 +179,32 @@
                 return this.NotFound();
             }
 
-            var tag = await this._context.Tags
+            var City = await this._context.Cities
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (tag == null)
+            if (City == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(tag);
+            return this.View(City);
         }
 
-        // POST: Admin/Tag/Delete/5
+        // POST: Admin/City/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tag = await this._context.Tags.FindAsync(id);
-            tag.IsDeleted = true;
-            tag.DeletedOn = DateTime.Now.AddHours(-3);
+            var City = await this._context.Cities.FindAsync(id);
+            City.IsDeleted = true;
+            City.DeletedOn = DateTime.Now.AddHours(-3);
             await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        private bool TagExists(int id)
+        private bool CityExists(int id)
         {
-            return this._context.Tags.Any(e => e.Id == id);
+            return this._context.Cities.Any(e => e.Id == id);
         }
     }
 }

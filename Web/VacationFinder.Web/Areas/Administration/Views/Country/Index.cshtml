@@ -1,13 +1,14 @@
-﻿@model VacationFinder.Web.ViewModels.Administration.Country.IndexViewModel;
+﻿@model IEnumerable<VacationFinder.Data.Models.Country>;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Country";
 
     var routeData = new Dictionary<string, string>();
     routeData["order"] = "";
     routeData["name"] = "";
     routeData["continent"] = "";
+    routeData["perPage"] = "";
     foreach (var x in Context.Request.Query)
     {
         routeData[x.Key] = x.Value;
@@ -27,6 +28,8 @@
         <option value="10">10</option>
         <option value="15">15</option>
     </select>
+
+    <input type="hidden" name="order" value="@routeData["perPage"]" />
     <input type="hidden" name="order" value="@routeData["order"]" />
     <input type="hidden" name="name" value="@routeData["name"]" />
     <input type="hidden" name="continent" value="@routeData["continent"]" />
@@ -66,35 +69,35 @@
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
                    asp-route-order="title">
-                    @Html.DisplayNameFor(model => model.List.First().Name)
+                    @Html.DisplayNameFor(model => model.Name)
                 </a>
             </th>
             <th>
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
                    asp-route-order="continent">
-                    @Html.DisplayNameFor(model => model.List.First().Continent)
+                    @Html.DisplayNameFor(model => model.Continent)
                 </a>
             </th>
             <th>
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
                    asp-route-order="createdOn">
-                    @Html.DisplayNameFor(model => model.List.First().CreatedOn)
+                    @Html.DisplayNameFor(model => model.CreatedOn)
                 </a>
             </th>
             <th>
                 <a asp-action="Index"
                    asp-all-route-data="@routeData"
                    asp-route-order="modifiedOn">
-                    @Html.DisplayNameFor(model => model.List.First().ModifiedOn)
+                    @Html.DisplayNameFor(model => model.ModifiedOn)
                 </a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.List)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
@@ -154,7 +157,7 @@
     <div class="currentPage">
         @currentPage
     </div>
-    @if (currentPage < Model.Pages)
+    @if (currentPage < ViewBag.Pages)
     {
 
         <a class="pageButtons"
@@ -168,7 +171,7 @@
            asp-action="Index"
            asp-all-route-data="@routeData"
            asp-route-order="@Context.Request.Query["order"]"
-           asp-route-page="@Model.Pages">
+           asp-route-page="@ViewBag.Pages">
             last
         </a>
     }

@@ -9,15 +9,18 @@
     using Microsoft.EntityFrameworkCore;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
-    using VacationFinder.Web.ViewModels.Administration.Transport;
+    using VacationFinder.Services;
 
     public class TransportController : AdministrationController
     {
         private readonly ApplicationDbContext _context;
 
+        private readonly IPagingService pagingService;
+
         public TransportController(ApplicationDbContext context)
         {
             this._context = context;
+            this.pagingService = new PagingService();
         }
 
         public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? title, string? sort)
@@ -55,12 +58,18 @@
                 list = list.Where(t => t.Title.Contains(title)).ToList();
             }
 
-            if (sort != null)
+            try
             {
-                list = list.Where(t => t.Sort == int.Parse(sort)).ToList();
+                if (sort != null)
+                {
+                    list = list.Where(t => t.Sort == int.Parse(sort)).ToList();
+                }
             }
+            catch { }
 
-            return this.View(new IndexViewModel() { List = GetPage(list, pageNumber, pageSize), Pages = GetPageCount(list, pageSize) });
+            this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
+
+            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<Transport>().ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -194,28 +203,6 @@
         private bool TransportExists(int id)
         {
             return this._context.Transports.Any(e => e.Id == id);
-        }
-
-        private static IEnumerable<Transport> GetPage(IEnumerable<Transport> list, int pageNumber, int pageSize = 10)
-        {
-            return list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-        }
-
-        private static int GetPageCount(IEnumerable<Transport> list, int pageSize = 10)
-        {
-            int count = list.Count();
-            if (count == 0)
-            {
-                return 1;
-            }
-
-
-            if (count % pageSize == 0)
-            {
-                return count / pageSize;
-            }
-
-            return (count / pageSize) + 1;
         }
     }
 }

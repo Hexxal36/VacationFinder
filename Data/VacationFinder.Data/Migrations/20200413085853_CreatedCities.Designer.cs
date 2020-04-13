@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VacationFinder.Data;
 
 namespace VacationFinder.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200413085853_CreatedCities")]
+    partial class CreatedCities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,6 +252,9 @@ namespace VacationFinder.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
@@ -271,6 +276,8 @@ namespace VacationFinder.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
                     b.HasIndex("CountryId");
 
                     b.HasIndex("IsDeleted");
@@ -286,6 +293,9 @@ namespace VacationFinder.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Continent")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -305,6 +315,8 @@ namespace VacationFinder.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
 
                     b.HasIndex("IsDeleted");
 
@@ -368,6 +380,9 @@ namespace VacationFinder.Data.Migrations
                     b.Property<int>("Sort")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TagId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -375,6 +390,8 @@ namespace VacationFinder.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("TagId");
 
                     b.ToTable("Tags");
                 });
@@ -408,9 +425,14 @@ namespace VacationFinder.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TransportId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("TransportId");
 
                     b.ToTable("Transports");
                 });
@@ -468,11 +490,36 @@ namespace VacationFinder.Data.Migrations
 
             modelBuilder.Entity("VacationFinder.Data.Models.City", b =>
                 {
+                    b.HasOne("VacationFinder.Data.Models.City", null)
+                        .WithMany("Cities")
+                        .HasForeignKey("CityId");
+
                     b.HasOne("VacationFinder.Data.Models.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("VacationFinder.Data.Models.Country", b =>
+                {
+                    b.HasOne("VacationFinder.Data.Models.Country", null)
+                        .WithMany("Countries")
+                        .HasForeignKey("CountryId");
+                });
+
+            modelBuilder.Entity("VacationFinder.Data.Models.Tag", b =>
+                {
+                    b.HasOne("VacationFinder.Data.Models.Tag", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("TagId");
+                });
+
+            modelBuilder.Entity("VacationFinder.Data.Models.Transport", b =>
+                {
+                    b.HasOne("VacationFinder.Data.Models.Transport", null)
+                        .WithMany("Transports")
+                        .HasForeignKey("TransportId");
                 });
 #pragma warning restore 612, 618
         }

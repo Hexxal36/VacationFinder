@@ -2,23 +2,20 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using VacationFinder.Data.Common.Models;
     using VacationFinder.Data.Models.Enums;
 
-    public class Country : BaseDeletableModel<int>
+    public class City : BaseDeletableModel<int>
     {
-        public Country()
-        {
-            this.Cities = new HashSet<City>();
-        }
-
         [Required]
         public string Name { get; set; }
 
         [Required]
-        public Continent Continent { get; set; }
+        public int CountryId { get; set; }
 
-        public virtual ICollection<City> Cities { get; set; }
+        [ForeignKey("CountryId")]
+        public virtual Country Country { get; set; }
     }
 }

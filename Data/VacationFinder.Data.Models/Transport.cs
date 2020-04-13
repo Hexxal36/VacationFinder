@@ -7,11 +7,6 @@
 
     public class Transport : BaseDeletableModel<int>
     {
-        public Transport()
-        {
-            this.Transports = new HashSet<Transport>();
-        }
-
         [Required]
         public string Title { get; set; }
 
@@ -19,7 +14,5 @@
         public int Sort { get; set; }
 
         public bool IsActive { get; set; }
-
-        public virtual ICollection<Transport> Transports { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model VacationFinder.Data.Models.Country
+﻿@model VacationFinder.Data.Models.City
 
 @{
     ViewData["Title"] = "Edit";
@@ -7,7 +7,7 @@
 
 <h1>Edit</h1>
 
-<h4>Country</h4>
+<h4>City</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,19 +19,14 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Continent" class="control-label"></label>
-                <select asp-for="Continent" class="form-control">
-                    <option value="0">Unknown</option>
-                    <option value="1">Europe</option>
-                    <option value="2">Asia</option>
-                    <option value="3">Africa</option>
-                    <option value="4">North_America</option>
-                    <option value="5">South_America</option>
-                    <option value="6">Australia</option>
+                <label asp-for="CountryId" class="control-label"></label>
+                <select asp-for="CountryId" class="form-control">
+                    @foreach (var country in ViewBag.Countries)
+                    {
+                        <option value="@country.Id">@country.Name</option>
+                    }
                 </select>
-                <span asp-validation-for="Continent" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

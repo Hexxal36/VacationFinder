@@ -29,6 +29,8 @@
 
         public DbSet<Transport> Transports { get; set; }
 
+        public DbSet<City> Cities { get; set; }
+
         public DbSet<Country> Countries { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
