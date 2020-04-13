@@ -1,29 +1,46 @@
-﻿@model IEnumerable<VacationFinder.Data.Models.Hotel>
+﻿@model IEnumerable<VacationFinder.Data.Models.Offer>
 
 @{
     ViewData["Title"] = "Hotel";
 }
 
-<h1>Hotel</h1>
+<h1>Offer</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
+    <a asp-area="Administration" asp-controller="OfferImage" asp-action="Create">Add Image</a>
+
 </p>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Stars)
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Days)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nights)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsActive)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                @Html.DisplayNameFor(model => model.IsSpecial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hotel)
+            </th>
+            <th>
+                 @Html.DisplayNameFor(model => model.Tag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transport)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedOn)
@@ -39,16 +56,31 @@
         {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Stars)
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Days)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nights)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.City.Name)
+                @Html.DisplayFor(modelItem => item.IsSpecial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hotel.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tag.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Transport.Title)
             </td>
             <td>
                 @(item.CreatedOn.ToString("hh:mm dd.MM.yy"))

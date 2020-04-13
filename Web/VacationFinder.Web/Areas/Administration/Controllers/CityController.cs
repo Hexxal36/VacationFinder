@@ -9,68 +9,19 @@
     using Microsoft.EntityFrameworkCore;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
-    using VacationFinder.Services;
 
     public class CityController : AdministrationController
     {
         private readonly ApplicationDbContext context;
 
-        private readonly IPagingService pagingService;
-
         public CityController(ApplicationDbContext context)
         {
             this.context = context;
-            this.pagingService = new PagingService();
         }
 
-        #nullable enable
-
-        public async Task<IActionResult> Index(int? page, int? perPage, string? country, string? name, string? order)
+        public async Task<IActionResult> Index()
         {
-            int pageSize = perPage ?? 5;
-            int pageNumber = page ?? 1;
-
-            var list = await this.context.Cities.ToListAsync();
-
-            if (order != null)
-            {
-                switch (order)
-                {
-                    case "name":
-                        list = list.OrderBy(t => t.Name).ToList();
-                        break;
-                    case "country":
-                        list = list.OrderBy(t => t.Country.Name).ToList();
-                        break;
-                    case "createdOn":
-                        list = list.OrderByDescending(t => t.CreatedOn).ToList();
-                        break;
-                    case "modifiedOn":
-                        list = list.OrderByDescending(t => t.ModifiedOn).ToList();
-                        break;
-                }
-            }
-
-            if (name != null)
-            {
-                list = list.Where(t => t.Name.Contains(name)).ToList();
-            }
-
-            try
-            {
-                if (country != null)
-                {
-                    list = list.Where(t => t.CountryId == int.Parse(country)).ToList();
-                }
-            }
-            catch
-            {
-            }
-
-            this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
-            this.ViewBag.Countries = await this.context.Countries.ToListAsync();
-
-            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<City>().ToList());
+            return this.View(await this.context.Cities.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)

@@ -7,6 +7,11 @@
 
     public class Tag : BaseDeletableModel<int>
     {
+        public Tag()
+        {
+            this.Offers = new HashSet<Offer>();
+        }
+
         [Required]
         public string Title { get; set; }
 
@@ -14,5 +19,7 @@
         public int Sort { get; set; }
 
         public bool IsActive { get; set; }
+
+        public virtual ICollection<Offer> Offers { get; set; }
     }
 }

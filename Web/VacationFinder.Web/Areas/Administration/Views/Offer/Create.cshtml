@@ -1,0 +1,98 @@
+﻿@model VacationFinder.Data.Models.Offer
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Offer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Days" class="control-label"></label>
+                <input asp-for="Days" class="form-control" />
+                <span asp-validation-for="Days" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nights" class="control-label"></label>
+                <input asp-for="Nights" class="form-control" />
+                <span asp-validation-for="Nights" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsSpecial" /> @Html.DisplayNameFor(model => model.IsSpecial)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Active_From" class="control-label"></label>
+                <input asp-for="Active_From" class="form-control" />
+                <span asp-validation-for="Active_From" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Active_Until" class="control-label"></label>
+                <input asp-for="Active_Until" class="form-control" />
+                <span asp-validation-for="Active_Until" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="hotel" class="control-label"></label>
+                <select asp-for="HotelId" class="form-control">
+                    @foreach (var hotel in ViewBag.Hotels)
+                    {
+                        <option value="@hotel.Id">@hotel.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tag" class="control-label"></label>
+                <select asp-for="TagId" class="form-control">
+                    @foreach (var tag in ViewBag.Tags)
+                    {
+                        <option value="@tag.Id">@tag.Title</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="transport" class="control-label"></label>
+                <select asp-for="TransportId" class="form-control">
+                    @foreach (var transport in ViewBag.Transports)
+                    {
+                        <option value="@transport.Id">@transport.Title</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

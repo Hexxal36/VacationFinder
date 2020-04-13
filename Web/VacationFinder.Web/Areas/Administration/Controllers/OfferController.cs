@@ -10,18 +10,18 @@
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
 
-    public class TransportController : AdministrationController
+    public class OfferController : AdministrationController
     {
         private readonly ApplicationDbContext context;
 
-        public TransportController(ApplicationDbContext context)
+        public OfferController(ApplicationDbContext context)
         {
             this.context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.context.Transports.ToListAsync());
+            return this.View(await this.context.Offers.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -31,43 +31,48 @@
                 return this.NotFound();
             }
 
-            var transport = await this.context.Transports
+            var offer = await this.context.Offers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (transport == null)
+            if (offer == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            return this.View(offer);
         }
 
-        // GET: Admin/Transport/Create
-        public IActionResult Create()
+        // GET: Admin/Offer/Create
+        public async Task<IActionResult> Create()
         {
+            this.ViewBag.Hotels = await this.context.Hotels.ToListAsync();
+            this.ViewBag.Tags = await this.context.Tags.ToListAsync();
+            this.ViewBag.Transports = await this.context.Transports.ToListAsync();
+
             return this.View();
         }
 
-        // POST: Admin/Transport/Create
+        // POST: Admin/Offer/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Sort,Id,IsActive")] Transport transport)
+        public async Task<IActionResult> Create(
+            [Bind("Title, Price, Id, IsActive, Days, Nights, IsSpecial, Active_From, Active_Until, Description, HotelId, TagId, TransportId")] Offer offer)
         {
-            transport.CreatedOn = DateTime.Now.AddHours(-3);
-            transport.IsDeleted = false;
+            offer.CreatedOn = DateTime.Now.AddHours(-3);
+            offer.IsDeleted = false;
 
             if (this.ModelState.IsValid)
             {
-                this.context.Add(transport);
+                this.context.Add(offer);
                 await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
-            return this.View(transport);
+            return this.View(offer);
         }
 
-        // GET: Admin/Transport/Edit/5
+        // GET: Admin/Offer/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,23 +80,28 @@
                 return this.NotFound();
             }
 
-            var transport = await this.context.Transports.FindAsync(id);
-            if (transport == null)
+            var offer = await this.context.Offers.FindAsync(id);
+            if (offer == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            this.ViewBag.Hotels = await this.context.Hotels.ToListAsync();
+            this.ViewBag.Tags = await this.context.Tags.ToListAsync();
+            this.ViewBag.Transports = await this.context.Transports.ToListAsync();
+
+            return this.View(offer);
         }
 
-        // POST: Admin/Transport/Edit/5
+        // POST: Admin/Offer/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Sort,Id,IsActive")] Transport transport)
+        public async Task<IActionResult> Edit(
+            int id, [Bind("Title, Price, Id, IsActive, Days, Nights, IsSpecial, Active_From, Active_Until, Description, HotelId, TagId, TransportId")] Offer offer)
         {
-            if (id != transport.Id)
+            if (id != offer.Id)
             {
                 return this.NotFound();
             }
@@ -100,12 +110,12 @@
             {
                 try
                 {
-                    this.context.Update(transport);
+                    this.context.Update(offer);
                     await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.TransportExists(transport.Id))
+                    if (!this.OfferExists(offer.Id))
                     {
                         return this.NotFound();
                     }
@@ -118,10 +128,10 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(transport);
+            return this.View(offer);
         }
 
-        // GET: Admin/Transport/Delete/5
+        // GET: Admin/Offer/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,32 +139,32 @@
                 return this.NotFound();
             }
 
-            var transport = await this.context.Transports
+            var offer = await this.context.Offers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (transport == null)
+            if (offer == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(transport);
+            return this.View(offer);
         }
 
-        // POST: Admin/Transport/Delete/5
+        // POST: Admin/Offer/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transport = await this.context.Transports.FindAsync(id);
-            transport.IsDeleted = true;
-            transport.DeletedOn = DateTime.Now.AddHours(-3);
+            var offer = await this.context.Offers.FindAsync(id);
+            offer.IsDeleted = true;
+            offer.DeletedOn = DateTime.Now.AddHours(-3);
             await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        private bool TransportExists(int id)
+        private bool OfferExists(int id)
         {
-            return this.context.Transports.Any(e => e.Id == id);
+            return this.context.Offers.Any(e => e.Id == id);
         }
     }
 }

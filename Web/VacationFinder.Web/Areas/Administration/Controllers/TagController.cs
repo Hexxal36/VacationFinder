@@ -9,70 +9,19 @@
     using Microsoft.EntityFrameworkCore;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
-    using VacationFinder.Services;
 
     public class TagController : AdministrationController
     {
         private readonly ApplicationDbContext context;
 
-        private readonly IPagingService pagingService;
-
         public TagController(ApplicationDbContext context)
         {
             this.context = context;
-            this.pagingService = new PagingService();
         }
 
-        #nullable enable
-
-        public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? title, string? sort)
+        public async Task<IActionResult> Index()
         {
-            int pageSize = perPage ?? 5;
-            int pageNumber = page ?? 1;
-
-            var list = await this.context.Tags.ToListAsync();
-
-            if (order != null)
-            {
-                switch (order)
-                {
-                    case "title":
-                        list = list.OrderBy(t => t.Title).ToList();
-                        break;
-                    case "sort":
-                        list = list.OrderByDescending(t => t.Sort).ToList();
-                        break;
-                    case "isActive":
-                        list = list.OrderByDescending(t => t.IsActive).ToList();
-                        break;
-                    case "createdOn":
-                        list = list.OrderByDescending(t => t.CreatedOn).ToList();
-                        break;
-                    case "modifiedOn":
-                        list = list.OrderByDescending(t => t.ModifiedOn).ToList();
-                        break;
-                }
-            }
-
-            if (title != null)
-            {
-                list = list.Where(t => t.Title.Contains(title)).ToList();
-            }
-
-            try
-            {
-                if (sort != null)
-                {
-                    list = list.Where(t => t.Sort == int.Parse(sort)).ToList();
-                }
-            }
-            catch
-            {
-            }
-
-            this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
-
-            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<Tag>().ToList());
+            return this.View(await this.context.Tags.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)

@@ -1,95 +1,31 @@
 ﻿@model IEnumerable<VacationFinder.Data.Models.Transport>;
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 
 @{
     ViewData["Title"] = "Transport";
-
-    var routeData = new Dictionary<string, string>();
-    routeData["order"] = "";
-    routeData["title"] = "";
-    routeData["sort"] = "";
-    routeData["perPage"] = "";
-    foreach (var x in Context.Request.Query)
-    {
-        routeData[x.Key] = x.Value;
-    }
 }
-<h1>Index</h1>
+    <h1>Transport</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 
-<form asp-action="Index" method="get">
-
-    Per Page:
-    <select name="perPage">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-    </select>
-
-    <input type="hidden" name="order" value="@routeData["perPage"]" />
-    <input type="hidden" name="order" value="@routeData["order"]" />
-    <input type="hidden" name="title" value="@routeData["title"]" />
-    <input type="hidden" name="sort" value="@routeData["sort"]" />
-    <button class="btn btn-primary" type="submit">Paginate</button>
-
-    <a class="btn btn-primary"
-       asp-action="Index">
-        Clear
-    </a>
-</form>
-
-<form asp-action="Index" method="get">
-    <label for="title">Title:</label>
-    <input type="text" name="title" />
-
-    <label for="sort">Sort:</label>
-    <input type="text" name="sort" />
-
-    <input type="hidden" name="order" value="@routeData["order"]" />
-    <input type="hidden" name="order" value="@routeData["perPage"]" />
-
-    <button class="btn btn-primary" type="submit">Filter</button>
-</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index"
-                   asp-all-route-data="@routeData"
-                   asp-route-order="title">
-                    @Html.DisplayNameFor(model => model.Title)
-                </a>
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                <a asp-action="Index"
-                   asp-all-route-data="@routeData"
-                   asp-route-order="sort">
-                    @Html.DisplayNameFor(model => model.Sort)
-                </a>
+                @Html.DisplayNameFor(model => model.Sort)
             </th>
             <th>
-                <a asp-action="Index"
-                   asp-all-route-data="@routeData"
-                   asp-route-order="isActive">
-                    @Html.DisplayNameFor(model => model.IsActive)
-                </a>
+                @Html.DisplayNameFor(model => model.IsActive)
             </th>
             <th>
-                <a asp-action="Index"
-                   asp-all-route-data="@routeData"
-                   asp-route-order="createdOn">
-                    @Html.DisplayNameFor(model => model.CreatedOn)
-                </a>
+                @Html.DisplayNameFor(model => model.CreatedOn)
             </th>
             <th>
-                <a asp-action="Index"
-                   asp-all-route-data="@routeData"
-                   asp-route-order="modifiedOn">
-                    @Html.DisplayNameFor(model => model.ModifiedOn)
-                </a>
+                @Html.DisplayNameFor(model => model.ModifiedOn)
             </th>
             <th></th>
         </tr>
@@ -97,86 +33,35 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sort)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedOn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ModifiedOn)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sort)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @(item.CreatedOn.ToString("hh:mm dd.MM.yy"))
+            </td>
+            <td>
+                @(item.ModifiedOn.HasValue ? item.ModifiedOn.Value.ToString("hh:mm dd.MM.yy") : string.Empty)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
 
-<p>
-
-</p>
-
-@{
-    int currentPage = 1;
-    var perPage = HttpContextAccessor.HttpContext.Request.Query["perPage"];
-
-
-    try
-    {
-        currentPage = int.Parse(HttpContextAccessor.HttpContext.Request.Query["page"]);
-    }
-    catch { }
-}
-
-<div class="paginationUrls">
-    @if (currentPage > 1)
-    {
-        <a class="pageButtons"
-           asp-action="Index"
-           asp-all-route-data="@routeData"
-           asp-route-order="@Context.Request.Query["order"]"
-           asp-route-page="1">
-            first
-        </a>
-        <a class="pageButtons"
-           asp-action="Index"
-           asp-all-route-data="@routeData"
-           asp-route-order="@Context.Request.Query["order"]"
-           asp-route-page="@(currentPage - 1)">
-            previous
-        </a>
-
-    }
-    <div class="currentPage">
-        @currentPage
-    </div>
-    @if (currentPage < ViewBag.Pages)
-    {
-
-        <a class="pageButtons"
-           asp-action="Index"
-           asp-all-route-data="@routeData"
-           asp-route-order="@Context.Request.Query["order"]"
-           asp-route-page="@(currentPage + 1)">
-            next
-        </a>
-        <a class="pageButtons"
-           asp-action="Index"
-           asp-all-route-data="@routeData"
-           asp-route-order="@Context.Request.Query["order"]"
-           asp-route-page="@ViewBag.Pages">
-            last
-        </a>
-    }
-</div>
+<script>
+    $(document).ready(function () {
+        $.noConflict();
+        $('.table').DataTable();
+    } );
+</script>

@@ -9,80 +9,19 @@
     using Microsoft.EntityFrameworkCore;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
-    using VacationFinder.Services;
 
     public class HotelController : AdministrationController
     {
         private readonly ApplicationDbContext context;
 
-        private readonly IPagingService pagingService;
-
         public HotelController(ApplicationDbContext context)
         {
             this.context = context;
-            this.pagingService = new PagingService();
         }
 
-#nullable enable
-
-        public async Task<IActionResult> Index(int? page, int? perPage, string? order, string? name, string? city, string? stars)
+        public async Task<IActionResult> Index()
         {
-            int pageSize = perPage ?? 5;
-            int pageNumber = page ?? 1;
-
-            var list = await this.context.Hotels.ToListAsync();
-
-            if (order != null)
-            {
-                switch (order)
-                {
-                    case "name":
-                        list = list.OrderBy(t => t.Name).ToList();
-                        break;
-                    case "city":
-                        list = list.OrderBy(t => t.City.Name).ToList();
-                        break;
-                    case "stars":
-                        list = list.OrderByDescending(t => t.Stars).ToList();
-                        break;
-                    case "isActive":
-                        list = list.OrderByDescending(t => t.IsActive).ToList();
-                        break;
-                    case "createdOn":
-                        list = list.OrderByDescending(t => t.CreatedOn).ToList();
-                        break;
-                    case "modifiedOn":
-                        list = list.OrderByDescending(t => t.ModifiedOn).ToList();
-                        break;
-                }
-            }
-
-            if (name != null)
-            {
-                list = list.Where(t => t.Name.Contains(name)).ToList();
-            }
-
-            try
-            {
-                if (city != null)
-                {
-                    list = list.Where(t => t.City.Id == int.Parse(city)).ToList();
-                }
-
-                if (stars != null)
-                {
-                    list = list.Where(t => t.Stars == int.Parse(stars)).ToList();
-                }
-            }
-            catch
-            {
-            }
-
-            this.ViewBag.Cities = await this.context.Cities.ToListAsync();
-
-            this.ViewBag.Pages = this.pagingService.GetPageCount(list, pageSize);
-
-            return this.View(this.pagingService.GetPage(list, pageNumber, pageSize).Cast<Hotel>().ToList());
+            return this.View(await this.context.Hotels.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)

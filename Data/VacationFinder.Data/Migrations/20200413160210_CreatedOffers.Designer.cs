@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VacationFinder.Data;
 
 namespace VacationFinder.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200413160210_CreatedOffers")]
+    partial class CreatedOffers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -429,7 +431,7 @@ namespace VacationFinder.Data.Migrations
                     b.ToTable("Offers");
                 });
 
-            modelBuilder.Entity("VacationFinder.Data.Models.OfferImage", b =>
+            modelBuilder.Entity("VacationFinder.Data.Models.OfferImg", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -461,7 +463,7 @@ namespace VacationFinder.Data.Migrations
 
                     b.HasIndex("OfferId");
 
-                    b.ToTable("OfferImages");
+                    b.ToTable("OfferImg");
                 });
 
             modelBuilder.Entity("VacationFinder.Data.Models.Setting", b =>
@@ -658,7 +660,7 @@ namespace VacationFinder.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VacationFinder.Data.Models.OfferImage", b =>
+            modelBuilder.Entity("VacationFinder.Data.Models.OfferImg", b =>
                 {
                     b.HasOne("VacationFinder.Data.Models.Offer", "Offer")
                         .WithMany("Images")
