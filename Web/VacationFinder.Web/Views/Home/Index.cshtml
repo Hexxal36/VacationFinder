@@ -1,9 +1,73 @@
-﻿@using VacationFinder.Common
-@{
+﻿@{
     this.ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@foreach (var offer in ViewBag.SpecialOffers)
+{
+    <div class="special-offer-div"
+         @if (offer != ViewBag.SpecialOffers[0]) { @: style="display:none"
+         }>
+        <img src="@offer.Hotel.ImageUrl" class="special-offer-img" />
+        <div class="special-offer-info">
+            <p class="special-offer-title">@offer.Title</p>
+            <a href="#" class="special-offer-details">Details</a>
+            <p class="special-offer-price">Only for <b>@offer.Price.ToString("f2") USD</b></p>
+            <p class="special-offer-duration">
+                @offer.Days
+                <span class="icon-radio-unchecked"></span>/
+                @offer.Nights
+                <span class="icon-contrast"></span>
+            </p>
+            @if (offer != ViewBag.SpecialOffers[0])
+            {
+                <a class="special-offer-previous special-offer-change"><span class="icon-circle-left"></span></a>
+            }
+            @if (offer != ViewBag.SpecialOffers[ViewBag.SpecialOffers.Count - 1])
+            {
+                <a class="special-offer-next special-offer-change"><span class="icon-circle-right"></span></a>
+            }
+        </div>
+    </div>
+}
+
+
+<p class="title-p"></p>
+
+@*Make the news controller, model and administration*@
+<div>
+    <div>
+
+    </div>
+    <div>
+
+    </div>
+    <div>
+
+    </div>
 </div>
+
+
+
+
+@section Scripts
+{
+    <script>
+        var x = document.getElementsByClassName("special-offer-div");
+
+        var current = 0;
+
+        $(".special-offer-previous").click(() => {
+            x[current].style.display = "none";
+            current--;
+            x[current].style.display = "block";
+        })
+
+        $(".special-offer-next").click(() => {
+            x[current].style.display = "none";
+            current++;
+            x[current].style.display = "block";
+        })
+
+
+    </script>
+}

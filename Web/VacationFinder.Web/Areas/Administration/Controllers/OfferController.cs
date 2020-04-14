@@ -44,9 +44,9 @@
         // GET: Admin/Offer/Create
         public async Task<IActionResult> Create()
         {
-            this.ViewBag.Hotels = await this.context.Hotels.ToListAsync();
-            this.ViewBag.Tags = await this.context.Tags.ToListAsync();
-            this.ViewBag.Transports = await this.context.Transports.ToListAsync();
+            this.ViewBag.Hotels = await this.context.Hotels.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Tags = await this.context.Tags.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Transports = await this.context.Transports.Where(x => x.IsActive).ToListAsync();
 
             return this.View();
         }
@@ -86,9 +86,9 @@
                 return this.NotFound();
             }
 
-            this.ViewBag.Hotels = await this.context.Hotels.ToListAsync();
-            this.ViewBag.Tags = await this.context.Tags.ToListAsync();
-            this.ViewBag.Transports = await this.context.Transports.ToListAsync();
+            this.ViewBag.Hotels = await this.context.Hotels.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Tags = await this.context.Tags.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Transports = await this.context.Transports.Where(x => x.IsActive).ToListAsync();
 
             return this.View(offer);
         }

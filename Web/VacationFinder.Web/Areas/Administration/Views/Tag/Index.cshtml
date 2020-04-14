@@ -5,7 +5,7 @@
     ViewData["Title"] = "Tag";
 }
 
-    <h1>Tag</h1>
+<h1>Tag</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -62,9 +62,12 @@
 </table>
 
 
-<script>
-    $(document).ready(function () {
-        $.noConflict();
-        $('.table').DataTable();
-    } );
-</script>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $.noConflict();
+            $('.table').DataTable();
+        });
+    </script>
+}

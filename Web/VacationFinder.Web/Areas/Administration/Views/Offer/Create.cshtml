@@ -59,7 +59,7 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="hotel" class="control-label"></label>
+                <label for="hotel" class="control-label">Hotel</label>
                 <select asp-for="HotelId" class="form-control">
                     @foreach (var hotel in ViewBag.Hotels)
                     {
@@ -68,7 +68,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="tag" class="control-label"></label>
+                <label for="tag" class="control-label">Tag</label>
                 <select asp-for="TagId" class="form-control">
                     @foreach (var tag in ViewBag.Tags)
                     {
@@ -77,7 +77,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="transport" class="control-label"></label>
+                <label for="transport" class="control-label">Transport</label>
                 <select asp-for="TransportId" class="form-control">
                     @foreach (var transport in ViewBag.Transports)
                     {
