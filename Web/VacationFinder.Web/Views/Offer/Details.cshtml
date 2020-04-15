@@ -1,0 +1,116 @@
+﻿@model VacationFinder.Web.ViewModels.Offer.OfferViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @*<div class="col-sm-3 search-div">
+            <p id="search-title">Search</p>
+
+            <form method="get">
+                <input class="search-input" type="number" name="days" placeholder="Days">
+
+                <input class="search-input" type="number" name="nights" placeholder="Nights">
+
+                <select class="search-input" name="hotel">
+                    <option value="">Hotel</option>
+                </select>
+
+                <select class="search-input" name="tag">
+                    <option value="">Tag</option>
+                </select>
+
+                <select class="search-input" name="transport">
+                    <option value="">Transport</option>
+                </select>
+            </form>
+
+
+        </div>*@
+
+    <div class="col-sm-12">
+        <div id="offer-header">
+            <img src="@Model.Hotel.ImageUrl" class="hotel-image
+                @if (Model.IsSpecial)
+             {
+                 @:special-offer
+             }" />
+            <h4 id="offer-title">@Model.Title</h4>
+        </div>
+
+        <div id="offer-panel-selector">
+            <a id="details-menu" class="offer-panel-option offer-panel-option__active">Details</a>
+            <a id="images-menu" class="offer-panel-option">Images</a>
+            <a id="signup-menu" class="offer-panel-option">Sign up</a>
+        </div>
+
+        <div id="offer-panel-details">
+            <div id="offer-panel-info">
+                <p>
+                    @Model.Days
+                    <span class="icon-radio-unchecked"></span>/
+                    @Model.Nights
+                    <span class="icon-contrast"></span>
+                </p>
+                <p>Hotel: @Model.Hotel.Name</p>
+                <p>Transport: @Model.Transport.Title</p>
+                <p>Tag: @Model.Tag.Title</p>
+            </div>
+            <p>@Model.Description</p>
+        </div>
+
+        <div id="offer-panel-images" style="display:none;">
+            @foreach (var image in Model.OfferImages)
+            {
+                <img src="@image.ImageUrl" class="offer-image" />
+            }
+        </div>
+
+        <div id="offer-panel-signup" style="display:none;">
+            <p>To sign up please contact us through the outlets in the Contact page</p>
+        </div>
+    </div>
+</div>
+
+@section Styles
+{
+    <link href="~/css/offer/details.css" rel="stylesheet" />
+}
+
+<script>
+    var details = document.getElementById("offer-panel-details");
+    var images = document.getElementById("offer-panel-images");
+    var signup = document.getElementById("offer-panel-signup");
+    var detailsMenu = document.getElementById("details-menu");
+    var imagesMenu = document.getElementById("images-menu");
+    var signupMenu = document.getElementById("signup-menu");
+
+    detailsMenu.addEventListener("click", () => {
+        details.style.display = "block";
+        images.style.display = "none";
+        signup.style.display = "none";
+        detailsMenu.classList.add("offer-panel-option__active");
+        imagesMenu.classList.remove("offer-panel-option__active");
+        signupMenu.classList.remove("offer-panel-option__active");
+    })
+
+    imagesMenu.addEventListener("click", () => {
+        details.style.display = "none";
+        images.style.display = "block";
+        signup.style.display = "none";
+        detailsMenu.classList.remove("offer-panel-option__active");
+        imagesMenu.classList.add("offer-panel-option__active");
+        signupMenu.classList.remove("offer-panel-option__active");
+    })
+
+    signupMenu.addEventListener("click", () => {
+        details.style.display = "none";
+        images.style.display = "none";
+        signup.style.display = "block";
+        detailsMenu.classList.remove("offer-panel-option__active");
+        imagesMenu.classList.remove("offer-panel-option__active");
+        signupMenu.classList.add("offer-panel-option__active");
+    })
+</script>

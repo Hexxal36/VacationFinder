@@ -10,7 +10,7 @@
         <img src="@offer.Hotel.ImageUrl" class="special-offer-img" />
         <div class="special-offer-info">
             <p class="special-offer-title">@offer.Title</p>
-            <a href="#" class="special-offer-details">Details</a>
+            <a asp-controller="Offer" asp-action="Details" asp-route-id="@offer.Id" class="special-offer-details">Details</a>
             <p class="special-offer-price">Only for <b>@offer.Price.ToString("f2") USD</b></p>
             <p class="special-offer-duration">
                 @offer.Days
@@ -46,8 +46,10 @@
     </div>
 </div>
 
-
-
+@section Styles 
+{
+    <link href="~/css/home/index.css" rel="stylesheet" />
+}
 
 @section Scripts
 {

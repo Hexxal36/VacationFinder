@@ -1,0 +1,111 @@
+﻿.search-div {
+    background-color: sandybrown;
+    border: 1px solid black;
+    border-radius: 9px;
+    height: 300px;
+}
+
+#search-title {
+    text-align: center;
+    position: relative;
+    top: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    margin-bottom: 40px;
+}
+
+.search-label {
+    text-align: center;
+    display: block;
+}
+
+.search-input {
+    position: relative;
+    top: -10px;
+    height: 28px;
+    width: -webkit-fill-available;
+    margin: 10px 0;
+    padding: 0 10px;
+    border-radius: 10px;
+}
+
+.search-prop-div {
+    display: flex;
+}
+
+#offer-header {
+    height:300px;
+}
+
+.hotel-image {
+    max-height: 300px;
+    width: 100%;
+    border: 2px solid black;
+}
+
+.special-offer {
+    border:2px solid #ff6d6d !important;
+}
+
+#offer-title {
+    position: relative;
+    text-align: center;
+    background: wheat;
+    top: -20px;
+}
+
+#offer-panel-selector {
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    top: 8px;
+}
+
+.offer-panel-option {
+    font-weight: bold;
+    background-color: #dec9a2;
+    width: -webkit-fill-available;
+    text-align: center;
+    cursor: pointer;
+}
+
+.offer-panel-option:hover,
+.offer-panel-option__active {
+    background-color: #c8b592;
+}
+
+#offer-panel-details {
+    position: relative;
+    top: 8px;
+    text-indent: 50px;
+    background-color: #c8b592;
+    padding: 0 12px;
+}
+
+#offer-panel-info {
+    display: flex;
+    position: relative;
+    top: 8px;
+    font-weight: 500;
+}
+
+.offer-image {
+    max-width: 320px;
+    max-height: 320px;
+    padding: 5px 10px;
+}
+
+#offer-panel-images {
+    background-color: #c8b592;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#offer-panel-signup {
+    background-color: #c8b592;
+    position: relative;
+    top: 8px;
+    padding: 10px;
+}

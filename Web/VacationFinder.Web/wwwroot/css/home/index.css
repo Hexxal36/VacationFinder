@@ -1,0 +1,103 @@
+﻿
+.special-offer-div {
+    display: flex;
+    height: 350px;
+    border: 1px solid black;
+    background-color: dimgray;
+    border-radius: 15px;
+}
+
+
+.special-offer-info {
+    width: 1110px;
+    height: inherit;
+    z-index: 10;
+    position: absolute;
+    top: auto;
+    left: auto;
+}
+
+.special-offer-img {
+    max-height: 348px;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
+
+.special-offer-title {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+    position: relative;
+    left: 35%;
+    top: 35px;
+    max-height: 50px;
+    background-color: wheat;
+    width: max-content;
+}
+
+.special-offer-duration {
+    background-color: wheat;
+    width: fit-content;
+    position: absolute;
+    left: 1000px;
+    top: 220px;
+}
+
+.special-offer-price {
+    background-color: wheat;
+    width: fit-content;
+    position: absolute;
+    top: 250px;
+    left: 943px;
+}
+
+.special-offer-details {
+    background-color: burlywood;
+    font-size: 25px;
+    padding: 3px;
+    border-radius: 13px;
+    color: black;
+    text-decoration: none;
+    position: absolute;
+    top: 290px;
+    left: 1000px;
+}
+
+    .special-offer-details:hover {
+        color: black;
+        text-decoration: none;
+        background-color: saddlebrown;
+    }
+
+.special-offer-change {
+    font-size: 54px;
+    border-radius: 35px;
+    display: block;
+    width: 52px;
+    height: 52px;
+    background-color: wheat;
+    cursor: pointer;
+}
+
+.special-offer-previous {
+    position: absolute;
+    top: 150px;
+    left: 10px;
+}
+
+.special-offer-next {
+    position: absolute;
+    top: 150px;
+    right: 10px;
+}
+
+.title-p {
+    font-size: 23px;
+    font-family: monospace;
+    top: 20px;
+    position: relative;
+    text-align: center;
+}
