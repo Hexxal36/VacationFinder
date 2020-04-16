@@ -10,6 +10,7 @@
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
 
+    [AutoValidateAntiforgeryToken]
     public class HotelController : AdministrationController
     {
         private readonly ApplicationDbContext context;

@@ -10,6 +10,7 @@
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
 
+    [AutoValidateAntiforgeryToken]
     public class TagController : AdministrationController
     {
         private readonly ApplicationDbContext context;

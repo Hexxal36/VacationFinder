@@ -11,6 +11,7 @@
     using VacationFinder.Data.Models;
     using VacationFinder.Data.Models.Enums;
 
+    [AutoValidateAntiforgeryToken]
     public class CountryController : AdministrationController
     {
         private readonly ApplicationDbContext context;
