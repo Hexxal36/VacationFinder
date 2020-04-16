@@ -1,8 +1,11 @@
 ﻿@model VacationFinder.Web.ViewModels.Hotel.HotelViewModel
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+ Layout = "~/Views/Shared/_Layout.cshtml";
+
+ var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 }
 
 <div class="row">
@@ -14,11 +17,63 @@
 
         <div id="hotel-panel-selector">
             <a id="details-menu" class="hotel-panel-option hotel-panel-option__active">Details</a>
+            <a id="reviews-menu" class="hotel-panel-option">Reviews</a>
             <a id="offers-menu" class="hotel-panel-option">Offers</a>
         </div>
 
         <div id="hotel-panel-details">
             @Html.Raw(Model.Description)
+        </div>
+
+        <div id="hotel-panel-reviews" style="display:none;">
+            @foreach (var review in Model.HotelReviews)
+            {
+                <div class="review-header">
+                    <div class="review-div">
+                        <h1 class="review-title">@review.Title</h1>
+                        <p class="review-grade">
+                            @for (int i = 0; i < review.Grade; i++)
+                            {
+                                <span>★</span>
+                            }
+                            @for (int i = 0; i < 5 - review.Grade; i++)
+                            {
+                                <span>☆</span>
+                            }
+                        </p>
+                        @if (review.UserId == userId)
+                        {
+                            <form asp-controller="HotelReview" asp-action="Delete" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" value="@review.Id" name="reviewId">
+                                <input type="hidden" value="@Model.Id" name="hotelId">
+
+                                <button asp-controller="HotelReview" asp-action="Delete" class="review-delete">Delete</button>
+                            </form>
+                        }
+                    </div>
+                    <div class="review-body">@Html.Raw(review.Body)</div>
+                </div>
+            }
+
+            <p id="review-add-p">Add a review</p>
+
+            <form asp-controller="HotelReview" asp-action="Create" id="review-form">
+                @Html.AntiForgeryToken()
+                <div class="rating">
+                    <span id="1">☆</span><span id="2">☆</span><span id="3">☆</span><span id="4">☆</span><span id="5">☆</span>
+                </div>
+                <input type="hidden" value="0" name="grade" id="grade" />
+
+                <input type="hidden" value="@Model.Id" name="hotelId" id="grade" />
+
+                <input type="text" placeholder="Title:" name="title" />
+
+                <textarea name="body" class="textarea"></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+
         </div>
 
         <div id="hotel-panel-offers" style="display:none;">
@@ -28,7 +83,7 @@
                     <a class="offer-link" asp-controller="Offer" asp-action="Details" asp-route-id="@offer.Id">
                         @if (offer.Images.Any())
                         {
-                            <img class="offer-image" src="@offer.Images.First().ImageUrl"/>
+                            <img class="offer-image" src="@offer.Images.First().ImageUrl" />
                         }
                         else
                         {
@@ -47,28 +102,101 @@
     <link href="~/css/hotel/details.css" rel="stylesheet" />
 }
 
+@section HeadScripts
+{
+    <script src="https://cdn.tiny.cloud/1/ymwehg3uxot7976vmqix2w2tqeee8d0xh248j2jz6l2chhyo/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+}
+
+
 @section Scripts
 {
     <script>
-        var details = document.getElementById("hotel-panel-details");
-        var offers = document.getElementById("hotel-panel-offers");
-        var detailsMenu = document.getElementById("details-menu");
-        var offersMenu = document.getElementById("offers-menu");
+        var details = $("#hotel-panel-details");
+        var offers = $("#hotel-panel-offers");
+        var reviews = $("#hotel-panel-reviews")
+        var detailsMenu = $("#details-menu");
+        var offersMenu = $("#offers-menu");
+        var reviewsMenu = $("#reviews-menu");
 
-        detailsMenu.addEventListener("click", () => {
-            details.style.display = "block";
-            offers.style.display = "none";
-            detailsMenu.classList.add("hotel-panel-option__active");
-            offersMenu.classList.remove("hotel-panel-option__active");
+        detailsMenu.click(() => {
+            details.css("display", "block");
+            offers.css("display", "none");
+            reviews.css("display", "none");
+            detailsMenu.addClass("hotel-panel-option__active");
+            offersMenu.removeClass("hotel-panel-option__active");
+            reviewsMenu.removeClass("hotel-panel-option__active");
         })
 
-        offersMenu.addEventListener("click", () => {
-            details.style.display = "none";
-            offers.style.display = "flex";
-            detailsMenu.classList.remove("hotel-panel-option__active");
-            offersMenu.classList.add("hotel-panel-option__active");
+        offersMenu.click(() => {
+            details.css("display", "none");
+            offers.css("display", "flex");
+            reviews.css("display", "none");
+            detailsMenu.removeClass("hotel-panel-option__active");
+            offersMenu.addClass("hotel-panel-option__active");
+            reviewsMenu.removeClass("hotel-panel-option__active");
         })
 
+        reviewsMenu.click(() => {
+            details.css("display", "none");
+            offers.css("display", "none");
+            reviews.css("display", "block");
+            detailsMenu.removeClass("hotel-panel-option__active");
+            offersMenu.removeClass("hotel-panel-option__active");
+            reviewsMenu.addClass("hotel-panel-option__active");
+        })
+    </script>
 
+
+    <script>
+        $("#1").click(() => {
+            $("#5").addClass("selected-rating");
+            $("#4").addClass("selected-rating");
+            $("#3").addClass("selected-rating");
+            $("#2").addClass("selected-rating");
+            $("#1").addClass("selected-rating");
+            $("#grade").val("5");
+        })
+
+        $("#2").click(() => {
+            $("#5").addClass("selected-rating");
+            $("#4").addClass("selected-rating");
+            $("#3").addClass("selected-rating");
+            $("#2").addClass("selected-rating");
+            $("#1").removeClass("selected-rating");
+            $("#grade").val("4");
+        })
+
+        $("#3").click(() => {
+            $("#5").addClass("selected-rating");
+            $("#4").addClass("selected-rating");
+            $("#3").addClass("selected-rating");
+            $("#2").removeClass("selected-rating");
+            $("#1").removeClass("selected-rating");
+            $("#grade").val("3");
+        })
+
+        $("#4").click(() => {
+            $("#5").addClass("selected-rating");
+            $("#4").addClass("selected-rating");
+            $("#3").removeClass("selected-rating");
+            $("#2").removeClass("selected-rating");
+            $("#1").removeClass("selected-rating");
+            $("#grade").val("2");
+        })
+
+        $("#5").click(() => {
+            $("#5").addClass("selected-rating");
+            $("#4").removeClass("selected-rating");
+            $("#3").removeClass("selected-rating");
+            $("#2").removeClass("selected-rating");
+            $("#1").removeClass("selected-rating");
+            $("#grade").val("1");
+        })
+    </script>
+
+    <script>
+        tinymce.init({
+            selector: '.textarea'
+        });
     </script>
 }

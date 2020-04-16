@@ -52,6 +52,15 @@
     min-height: 50%;
 }
 
+#hotel-panel-reviews {
+    display: block;
+    background-color: #c8b592;
+    position: relative;
+    top: -28px;
+    padding: 10px;
+    min-height: 50%;
+}
+
 .offer-div {
     padding: 5px 10px;
     margin: 0;
@@ -85,4 +94,78 @@
 
 .offer-link:hover .offer-title {
     background-color: #c8b592;
+}
+
+.rating > span:hover:before {
+    content: "\2605";
+    position: absolute;
+}
+
+.rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+    content: "\2605";
+    position: absolute;
+}
+
+.selected-rating:before {
+    content: "\2605";
+    position: absolute;
+}
+
+.rating > span {
+    display: inline-block;
+    position: relative;
+    width: 1.1em;
+}
+
+#review-form {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#review-add-p {
+    border-bottom: 1px solid black;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.review-title {
+    padding: 0 50px;
+}
+
+.review-div {
+    display: flex;
+}
+
+.review-grade {
+    font-size: 27px;
+}
+
+.review-body {
+    height: 100px;
+    margin: 7px 50px;
+    padding: 3px 15px;
+    background: whitesmoke;
+}
+
+.review-delete {
+    position: relative;
+    right: -500px;
+    top: 15px;
+    background: wheat;
+    height: 25px;
+    color: black;
+    border: none;
+}
+
+.review-delete:hover {
+    text-decoration: none;
+    background: #dec9a2;
+    color: black;
 }

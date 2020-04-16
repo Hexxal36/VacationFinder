@@ -12,15 +12,17 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
 
-    @RenderSection("HeadScripts", required: false)
+    @this.RenderSection("HeadScripts", required: false)
 
     <environment names="Development">
         <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/admin.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/admin.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 </head>
 <body>
@@ -37,23 +39,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Back to the site</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Tag" asp-action="Index">Tags</a>
+                        <li class="nav-dropdown" id="offer-model-dropdown">
+                            <a class="nav-link text-dark">Offer Entities</a>
+                            <ul class="nav-dropdown-menu" id="nav-dropdown-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Tag" asp-action="Index">Tags</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Transport" asp-action="Index">Transports</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Country" asp-action="Index">Countries</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="City" asp-action="Index">Cities</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Hotel" asp-action="Index">Hotels</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Offer" asp-action="Index">Offers</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Transport" asp-action="Index">Transports</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Country" asp-action="Index">Countries</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="City" asp-action="Index">Cities</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Hotel" asp-action="Index">Hotels</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Offer" asp-action="Index">Offers</a>
+                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="HotelReview" asp-action="Index">Hotel Reviews</a>
                         </li>
                     </ul>
                 </div>
@@ -88,6 +98,20 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+        
+    <script>
+        var offerModelDD = document.getElementById("nav-dropdown-menu");
+
+        document.getElementById("offer-model-dropdown")
+            .addEventListener("click", () => {
+                if (offerModelDD.style.display == "none") {
+                    offerModelDD.style.display = "block";
+                }
+                else {
+                    offerModelDD.style.display = "none";
+                }
+            });
+    </script>
 
     @this.RenderSection("Scripts", required: false)
 </body>

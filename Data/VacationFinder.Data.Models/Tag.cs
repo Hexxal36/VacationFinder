@@ -13,6 +13,7 @@
         }
 
         [Required]
+        [StringLength(30, MinimumLength = 10)]
         public string Title { get; set; }
 
         [Required]

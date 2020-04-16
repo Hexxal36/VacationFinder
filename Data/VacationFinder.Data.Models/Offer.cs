@@ -16,6 +16,7 @@
         }
 
         [Required]
+        [StringLength(30, MinimumLength =10)]
         public string Title { get; set; }
 
         [Required]
@@ -32,12 +33,6 @@
 
         [Required]
         public bool IsSpecial { get; set; }
-
-        [Required]
-        public DateTime Active_From { get; set; }
-
-        [Required]
-        public DateTime Active_Until { get; set; }
 
         [Required]
         public string Description { get; set; }

@@ -12,9 +12,11 @@
         public Hotel()
         {
             this.Offers = new HashSet<Offer>();
+            this.HotelReviews = new HashSet<HotelReview>();
         }
 
         [Required]
+        [StringLength(30, MinimumLength = 10)]
         public string Name { get; set; }
 
         [Required]
@@ -37,5 +39,7 @@
         public virtual City City { get; set; }
 
         public virtual ICollection<Offer> Offers { get; set; }
+
+        public virtual ICollection<HotelReview> HotelReviews { get; set; }
     }
 }

@@ -14,6 +14,6 @@
 
         IEnumerable<Hotel> FilterHotels(IEnumerable<Hotel> hotels, string? name, int stars, City? city);
 
-        Hotel GetHotelById(int id);
+        Hotel? GetHotelById(int id);
     }
 }

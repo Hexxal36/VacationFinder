@@ -35,6 +35,8 @@
 
         public DbSet<Hotel> Hotels { get; set; }
 
+        public DbSet<HotelReview> HotelReviews { get; set; }
+
         public DbSet<Offer> Offers { get; set; }
 
         public DbSet<OfferImage> OfferImages { get; set; }

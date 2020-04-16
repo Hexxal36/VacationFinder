@@ -1,0 +1,26 @@
+﻿.navbar-nav {
+    overflow: hidden;
+}
+
+.nav-dropdown-menu {
+    display: none;
+    float: left;
+    overflow: hidden;
+    list-style-type: none;
+    padding: 0;
+    position: absolute;
+    background: white;
+    border: 1px solid black;
+    border-top: none;
+    top: 56px;
+    width: 108px;
+    z-index: 1;
+}
+
+.nav-link {
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    background: #c7c7c7
+}
