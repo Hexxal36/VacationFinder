@@ -1,0 +1,45 @@
+﻿@model VacationFinder.Web.ViewModels.Hotel.HotelListViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="form-div">
+        <form method="get" class="search-form">
+            <input class="form-input" type="text" value="" placeholder="Name" name="name" />
+            
+            <select class="form-input" name="stars">
+                <option value="">Select the amount of &#9733;</option>
+                <option value="1">&#9733;</option>
+                <option value="2">&#9733; &#9733;</option>
+                <option value="3">&#9733; &#9733; &#9733;</option>
+                <option value="4">&#9733; &#9733; &#9733; &#9733;</option>
+                <option value="5">&#9733; &#9733; &#9733; &#9733; &#9733;</option>
+            </select>
+
+            <select class="form-input" name="city">
+                <option value="">Select the city</option>
+                @foreach(var city in Model.Cities) {
+                    <option value="@city.Id">@city.Name</option>
+                }
+            </select>
+
+            <button type="submit" class="form-button"><span class="icon-search"></span></button>
+        </form>
+    </div>
+
+
+<div class="hotel-container-div">
+    @foreach (var item in Model.Hotels)
+    {
+        <a asp-action="Details" asp-route-id="@item.Id" class="hotel-details-link">
+            <img src="@item.ImageUrl" class="hotel-image" />
+            <p class="hotel-info">@item.Name, @item.City.Name</p>
+        </a>
+     }
+</div>
+
+@section Styles {
+    <link href="~/css/hotel/index.css" rel="stylesheet" />
+}

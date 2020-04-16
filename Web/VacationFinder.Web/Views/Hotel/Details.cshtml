@@ -1,0 +1,74 @@
+﻿@model VacationFinder.Web.ViewModels.Hotel.HotelViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div id="hotel-header">
+            <img src="@Model.ImageUrl" class="hotel-image" />
+            <h4 id="hotel-title">@Model.Name</h4>
+        </div>
+
+        <div id="hotel-panel-selector">
+            <a id="details-menu" class="hotel-panel-option hotel-panel-option__active">Details</a>
+            <a id="offers-menu" class="hotel-panel-option">Offers</a>
+        </div>
+
+        <div id="hotel-panel-details">
+            @Html.Raw(Model.Description)
+        </div>
+
+        <div id="hotel-panel-offers" style="display:none;">
+            @foreach (var offer in Model.Offers)
+            {
+                <div class="offer-div">
+                    <a class="offer-link" asp-controller="Offer" asp-action="Details" asp-route-id="@offer.Id">
+                        @if (offer.Images.Any())
+                        {
+                            <img class="offer-image" src="@offer.Images.First().ImageUrl"/>
+                        }
+                        else
+                        {
+                            <div class="no-offer-image"></div>
+                        }
+                        <p class="offer-title">@offer.Title</p>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles
+{
+    <link href="~/css/hotel/details.css" rel="stylesheet" />
+}
+
+@section Scripts
+{
+    <script>
+        var details = document.getElementById("hotel-panel-details");
+        var offers = document.getElementById("hotel-panel-offers");
+        var detailsMenu = document.getElementById("details-menu");
+        var offersMenu = document.getElementById("offers-menu");
+
+        detailsMenu.addEventListener("click", () => {
+            details.style.display = "block";
+            offers.style.display = "none";
+            detailsMenu.classList.add("hotel-panel-option__active");
+            offersMenu.classList.remove("hotel-panel-option__active");
+        })
+
+        offersMenu.addEventListener("click", () => {
+            details.style.display = "none";
+            offers.style.display = "flex";
+            detailsMenu.classList.remove("hotel-panel-option__active");
+            offersMenu.classList.add("hotel-panel-option__active");
+        })
+
+
+    </script>
+}

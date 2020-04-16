@@ -83,3 +83,8 @@ body {
     position: relative;
     top: -15px;
 }
+
+.icon-search:before {
+    content: "\e986";
+    font-family: Icons;
+}

@@ -6,30 +6,6 @@
 }
 
 <div class="row">
-    @*<div class="col-sm-3 search-div">
-            <p id="search-title">Search</p>
-
-            <form method="get">
-                <input class="search-input" type="number" name="days" placeholder="Days">
-
-                <input class="search-input" type="number" name="nights" placeholder="Nights">
-
-                <select class="search-input" name="hotel">
-                    <option value="">Hotel</option>
-                </select>
-
-                <select class="search-input" name="tag">
-                    <option value="">Tag</option>
-                </select>
-
-                <select class="search-input" name="transport">
-                    <option value="">Transport</option>
-                </select>
-            </form>
-
-
-        </div>*@
-
     <div class="col-sm-12">
         <div id="offer-header">
             <img src="@Model.Hotel.ImageUrl" class="hotel-image
@@ -58,7 +34,8 @@
                 <p>Transport: @Model.Transport.Title</p>
                 <p>Tag: @Model.Tag.Title</p>
             </div>
-            <p>@Model.Description</p>
+            @Html.Raw(Model.Description)
+            @Html.Raw(Model.Hotel.Description)
         </div>
 
         <div id="offer-panel-images" style="display:none;">
@@ -79,38 +56,41 @@
     <link href="~/css/offer/details.css" rel="stylesheet" />
 }
 
-<script>
-    var details = document.getElementById("offer-panel-details");
-    var images = document.getElementById("offer-panel-images");
-    var signup = document.getElementById("offer-panel-signup");
-    var detailsMenu = document.getElementById("details-menu");
-    var imagesMenu = document.getElementById("images-menu");
-    var signupMenu = document.getElementById("signup-menu");
+@section Scripts
+{
+    <script>
+        var details = document.getElementById("offer-panel-details");
+        var images = document.getElementById("offer-panel-images");
+        var signup = document.getElementById("offer-panel-signup");
+        var detailsMenu = document.getElementById("details-menu");
+        var imagesMenu = document.getElementById("images-menu");
+        var signupMenu = document.getElementById("signup-menu");
 
-    detailsMenu.addEventListener("click", () => {
-        details.style.display = "block";
-        images.style.display = "none";
-        signup.style.display = "none";
-        detailsMenu.classList.add("offer-panel-option__active");
-        imagesMenu.classList.remove("offer-panel-option__active");
-        signupMenu.classList.remove("offer-panel-option__active");
-    })
+        detailsMenu.addEventListener("click", () => {
+            details.style.display = "block";
+            images.style.display = "none";
+            signup.style.display = "none";
+            detailsMenu.classList.add("offer-panel-option__active");
+            imagesMenu.classList.remove("offer-panel-option__active");
+            signupMenu.classList.remove("offer-panel-option__active");
+        })
 
-    imagesMenu.addEventListener("click", () => {
-        details.style.display = "none";
-        images.style.display = "block";
-        signup.style.display = "none";
-        detailsMenu.classList.remove("offer-panel-option__active");
-        imagesMenu.classList.add("offer-panel-option__active");
-        signupMenu.classList.remove("offer-panel-option__active");
-    })
+        imagesMenu.addEventListener("click", () => {
+            details.style.display = "none";
+            images.style.display = "block";
+            signup.style.display = "none";
+            detailsMenu.classList.remove("offer-panel-option__active");
+            imagesMenu.classList.add("offer-panel-option__active");
+            signupMenu.classList.remove("offer-panel-option__active");
+        })
 
-    signupMenu.addEventListener("click", () => {
-        details.style.display = "none";
-        images.style.display = "none";
-        signup.style.display = "block";
-        detailsMenu.classList.remove("offer-panel-option__active");
-        imagesMenu.classList.remove("offer-panel-option__active");
-        signupMenu.classList.add("offer-panel-option__active");
-    })
-</script>
+        signupMenu.addEventListener("click", () => {
+            details.style.display = "none";
+            images.style.display = "none";
+            signup.style.display = "block";
+            detailsMenu.classList.remove("offer-panel-option__active");
+            imagesMenu.classList.remove("offer-panel-option__active");
+            signupMenu.classList.add("offer-panel-option__active");
+        })
+    </script>
+}

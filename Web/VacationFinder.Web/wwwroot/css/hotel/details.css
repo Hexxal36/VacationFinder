@@ -1,0 +1,88 @@
+﻿.hotel-image {
+    max-height: 300px;
+    width: 100%;
+    border: 2px solid black;
+}
+
+#hotel-title {
+    position: relative;
+    text-align: center;
+    background: wheat;
+    top: -20px;
+}
+
+#hotel-panel-selector {
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    top: -28px;
+}
+
+.hotel-panel-option {
+    font-weight: bold;
+    background-color: #dec9a2;
+    width: -webkit-fill-available;
+    text-align: center;
+    cursor: pointer;
+}
+
+.hotel-panel-option:hover,
+.hotel-panel-option__active {
+    background-color: #c8b592;
+}
+
+#hotel-panel-details {
+    display: block;
+    background-color: #c8b592;
+    position: relative;
+    top: -28px;
+    padding: 10px;
+    min-height: 50%;
+}
+
+#hotel-panel-offers {
+    background-color: #c8b592;
+    padding: 10px;
+    position: relative;
+    top: -28px;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    min-height: 50%;
+}
+
+.offer-div {
+    padding: 5px 10px;
+    margin: 0;
+    background-color: beige;
+    height: 200px;
+    width: 33%;
+}
+
+.no-offer-image {
+    background-color: #bfbfbf;
+}
+
+.no-offer-image, .offer-image {
+    height: 188px;
+    width: 100%;
+}
+
+.offer-title {
+    position: relative;
+    top: -45px;
+    text-align: center;
+    background-color: wheat;
+    color: black;
+    font-weight: bold;
+    width: 100%;
+}
+
+.offer-link:hover {
+    text-decoration: none;
+}
+
+.offer-link:hover .offer-title {
+    background-color: #c8b592;
+}

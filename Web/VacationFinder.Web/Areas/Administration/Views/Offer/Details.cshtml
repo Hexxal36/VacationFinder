@@ -73,14 +73,14 @@
         </dd>
         <dt class="col-sm-2">Hotel Photo</dt>
         <dd class="col-sm-10">
-            <img src="@Model.Hotel.ImageUrl" />  
+            <img src="@Model.Hotel.ImageUrl" style="height:100px; width:100px" />  
         </dd>
         
         @foreach (var image in Model.Images)
         {
             <dt class="col-sm-2">Image:</dt>
             <dd>
-                <img src="@image.ImageUrl" height="45" width="80"/>
+                <img src="@image.ImageUrl" style="height:100px; width:100px"/>
                 <a asp-area="Administration" asp-controller="OfferImage" asp-action="Delete" asp-route-id="@image.Id">Delete</a>
             </dd>
             
