@@ -19,7 +19,7 @@
         <div id="offer-panel-selector">
             <a id="details-menu" class="offer-panel-option offer-panel-option__active">Details</a>
             <a id="images-menu" class="offer-panel-option">Images</a>
-            <a id="signup-menu" class="offer-panel-option">Sign up</a>
+            <a id="signup-menu" class="offer-panel-option">Get it</a>
         </div>
 
         <div id="offer-panel-details">
@@ -46,7 +46,14 @@
         </div>
 
         <div id="offer-panel-signup" style="display:none;">
-            <p>To sign up please contact us through the outlets in the Contact page</p>
+            <form method="post" asp-controller="Order" asp-action="Create">
+                <p>Please enter a valid email and we will send you a messege when your application is approved.</p>
+
+                <input type="email" value="" name="email" />
+                <input type="hidden" value="@Model.Id" name="OfferId" />
+
+                <button type="submit">Sign up</button>
+            </form>
         </div>
     </div>
 </div>

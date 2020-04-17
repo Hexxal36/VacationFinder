@@ -13,6 +13,7 @@
         public Offer()
         {
             this.Images = new HashSet<OfferImage>();
+            this.OfferUsers = new HashSet<Order>();
         }
 
         [Required]
@@ -56,5 +57,7 @@
         public virtual Transport Transport { get; set; }
 
         public virtual ICollection<OfferImage> Images { get; set; }
+
+        public virtual ICollection<Order> OfferUsers { get; set; }
     }
 }

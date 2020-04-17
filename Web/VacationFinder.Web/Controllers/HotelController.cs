@@ -14,16 +14,13 @@
     {
         private readonly IHotelService hotelService;
         private readonly ICityService cityService;
-        private readonly IHotelReviewService hotelReviewService;
 
         public HotelController(
              IHotelService hotelService,
-             ICityService cityService,
-             IHotelReviewService hotelReviewService)
+             ICityService cityService)
         {
             this.hotelService = hotelService;
             this.cityService = cityService;
-            this.hotelReviewService = hotelReviewService;
         }
 
         public IActionResult Index(HotelFilterViewModel filter)

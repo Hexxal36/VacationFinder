@@ -15,6 +15,10 @@
     <Compile Remove="Migrations\20200413084044_foreignKeyUpdates.Designer.cs" />
     <Compile Remove="Migrations\20200413085236_foreignKeyUpdates.cs" />
     <Compile Remove="Migrations\20200413085236_foreignKeyUpdates.Designer.cs" />
+    <Compile Remove="Migrations\20200417135055_UpdateOfferUser.cs" />
+    <Compile Remove="Migrations\20200417135055_UpdateOfferUser.Designer.cs" />
+    <Compile Remove="Migrations\20200417135300_UpdatedOfferUsers.cs" />
+    <Compile Remove="Migrations\20200417135300_UpdatedOfferUsers.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,9 +3,13 @@
 
 @{
     ViewData["Title"] = "Details";
- Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
- var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    string userId = null;
+    if (User.Identity.IsAuthenticated)
+    {
+        userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    }
 }
 
 <div class="row">
@@ -55,25 +59,30 @@
                     <div class="review-body">@Html.Raw(review.Body)</div>
                 </div>
             }
+            @if (User.Identity.IsAuthenticated)
+            {
+                <p id="review-add-p">Add a review</p>
 
-            <p id="review-add-p">Add a review</p>
+                <form asp-controller="HotelReview" asp-action="Create" method="post" id="review-form">
+                    @Html.AntiForgeryToken()
+                    <div class="rating">
+                        <span id="1">☆</span><span id="2">☆</span><span id="3">☆</span><span id="4">☆</span><span id="5">☆</span>
+                    </div>
+                    <input type="hidden" value="0" name="grade" id="grade" />
 
-            <form asp-controller="HotelReview" asp-action="Create" id="review-form">
-                @Html.AntiForgeryToken()
-                <div class="rating">
-                    <span id="1">☆</span><span id="2">☆</span><span id="3">☆</span><span id="4">☆</span><span id="5">☆</span>
-                </div>
-                <input type="hidden" value="0" name="grade" id="grade" />
+                    <input type="hidden" value="@Model.Id" name="hotelId" id="grade" />
 
-                <input type="hidden" value="@Model.Id" name="hotelId" id="grade" />
+                    <input type="text" placeholder="Title: (between 10 and 30 chars)" name="title" />
 
-                <input type="text" placeholder="Title:" name="title" />
+                    <textarea name="body" class="textarea"></textarea>
 
-                <textarea name="body" class="textarea"></textarea>
-
-                <button type="submit">Submit</button>
-            </form>
-
+                    <button type="submit">Submit</button>
+                </form>
+            }
+            else
+            {
+                <p id="review-add-p">To add a review log in</p>
+            }
         </div>
 
         <div id="hotel-panel-offers" style="display:none;">

@@ -22,6 +22,8 @@
             this.hotelReviewService = hotelReviewService;
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(HotelReviewCreateViewModel viewModel)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
