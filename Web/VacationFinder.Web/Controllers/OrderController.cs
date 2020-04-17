@@ -12,12 +12,12 @@
 
     public class OrderController : Controller
     {
-        private readonly IOrderService orderService;
+        private readonly IOrderService _orderService;
 
         public OrderController(
              IOrderService orderService)
         {
-            this.orderService = orderService;
+            this._orderService = orderService;
         }
 
         [HttpPost]
@@ -28,7 +28,7 @@
 
             if (this.ModelState.IsValid)
             {
-                await this.orderService.CreateAsync(viewModel.Email, viewModel.OfferId, userId);
+                await this._orderService.CreateAsync(viewModel.Email, viewModel.OfferId, userId);
             }
 
             return this.RedirectToAction("Details", "Offer", new { id = viewModel.OfferId });
@@ -39,7 +39,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int orderId)
         {
-            await this.orderService.DeleteAsync(orderId);
+            await this._orderService.DeleteAsync(orderId);
 
             return this.RedirectToAction("ShowOrders", "User");
         }

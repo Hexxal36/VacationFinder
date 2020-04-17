@@ -13,16 +13,16 @@
     [AutoValidateAntiforgeryToken]
     public class TagController : AdministrationController
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
         public TagController(ApplicationDbContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.context.Tags.ToListAsync());
+            return this.View(await this._context.Tags.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -32,7 +32,7 @@
                 return this.NotFound();
             }
 
-            var tag = await this.context.Tags
+            var tag = await this._context.Tags
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -60,8 +60,8 @@
 
             if (this.ModelState.IsValid)
             {
-                this.context.Add(tag);
-                await this.context.SaveChangesAsync();
+                this._context.Add(tag);
+                await this._context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
@@ -76,7 +76,7 @@
                 return this.NotFound();
             }
 
-            var tag = await this.context.Tags.FindAsync(id);
+            var tag = await this._context.Tags.FindAsync(id);
             if (tag == null)
             {
                 return this.NotFound();
@@ -101,8 +101,8 @@
             {
                 try
                 {
-                    this.context.Update(tag);
-                    await this.context.SaveChangesAsync();
+                    this._context.Update(tag);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +130,7 @@
                 return this.NotFound();
             }
 
-            var tag = await this.context.Tags
+            var tag = await this._context.Tags
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -146,16 +146,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tag = await this.context.Tags.FindAsync(id);
+            var tag = await this._context.Tags.FindAsync(id);
             tag.IsDeleted = true;
             tag.DeletedOn = DateTime.Now.AddHours(-3);
-            await this.context.SaveChangesAsync();
+            await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool TagExists(int id)
         {
-            return this.context.Tags.Any(e => e.Id == id);
+            return this._context.Tags.Any(e => e.Id == id);
         }
     }
 }

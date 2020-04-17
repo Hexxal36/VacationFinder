@@ -13,16 +13,16 @@
     [AutoValidateAntiforgeryToken]
     public class HotelController : AdministrationController
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
         public HotelController(ApplicationDbContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.context.Hotels.ToListAsync());
+            return this.View(await this._context.Hotels.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -32,7 +32,7 @@
                 return this.NotFound();
             }
 
-            var hotel = await this.context.Hotels
+            var hotel = await this._context.Hotels
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (hotel == null)
             {
@@ -45,7 +45,7 @@
         // GET: Admin/Hotel/Create
         public async Task<IActionResult> Create()
         {
-            this.ViewBag.Cities = await this.context.Cities.ToListAsync();
+            this.ViewBag.Cities = await this._context.Cities.ToListAsync();
 
             return this.View();
         }
@@ -62,8 +62,8 @@
 
             if (this.ModelState.IsValid)
             {
-                this.context.Add(hotel);
-                await this.context.SaveChangesAsync();
+                this._context.Add(hotel);
+                await this._context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
@@ -78,13 +78,13 @@
                 return this.NotFound();
             }
 
-            var hotel = await this.context.Hotels.FindAsync(id);
+            var hotel = await this._context.Hotels.FindAsync(id);
             if (hotel == null)
             {
                 return this.NotFound();
             }
 
-            this.ViewBag.Cities = await this.context.Cities.ToListAsync();
+            this.ViewBag.Cities = await this._context.Cities.ToListAsync();
 
             return this.View(hotel);
         }
@@ -105,8 +105,8 @@
             {
                 try
                 {
-                    this.context.Update(hotel);
-                    await this.context.SaveChangesAsync();
+                    this._context.Update(hotel);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -134,7 +134,7 @@
                 return this.NotFound();
             }
 
-            Hotel hotel = await this.context.Hotels
+            Hotel hotel = await this._context.Hotels
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (hotel == null)
             {
@@ -150,16 +150,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var hotel = await this.context.Hotels.FindAsync(id);
+            var hotel = await this._context.Hotels.FindAsync(id);
             hotel.IsDeleted = true;
             hotel.DeletedOn = DateTime.Now.AddHours(-3);
-            await this.context.SaveChangesAsync();
+            await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool HotelExists(int id)
         {
-            return this.context.Hotels.Any(e => e.Id == id);
+            return this._context.Hotels.Any(e => e.Id == id);
         }
     }
 }

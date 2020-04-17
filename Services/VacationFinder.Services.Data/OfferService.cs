@@ -8,18 +8,18 @@
 
     public class OfferService : IOfferService
     {
-        private readonly IDeletableEntityRepository<Offer> offerRepository;
+        private readonly IDeletableEntityRepository<Offer> _offerRepository;
 
         public OfferService(
             IDeletableEntityRepository<Offer> offerRepository)
         {
-            this.offerRepository = offerRepository;
+            this._offerRepository = offerRepository;
         }
 
         public IEnumerable<Offer> GetOffers()
         {
             List<Offer> query =
-                this.offerRepository.All().Where(x => x.IsActive).OrderByDescending(x => x.CreatedOn).ToList();
+                this._offerRepository.All().Where(x => x.IsActive).OrderByDescending(x => x.CreatedOn).ToList();
 
             return query;
         }
@@ -27,14 +27,14 @@
         public IEnumerable<Offer> GetSpecialOffers()
         {
             List<Offer> query =
-                this.offerRepository.All().Where(x => x.IsActive && x.IsSpecial).OrderByDescending(x => x.CreatedOn).ToList();
+                this._offerRepository.All().Where(x => x.IsActive && x.IsSpecial).OrderByDescending(x => x.CreatedOn).ToList();
 
             return query;
         }
 
         public Offer GetOfferById(int id)
         {
-            Offer offer = this.offerRepository.All().Where(x => x.Id == id).ToList().First();
+            Offer offer = this._offerRepository.All().Where(x => x.Id == id).ToList().First();
 
             if (this.IsOfferActive(offer))
             {

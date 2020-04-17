@@ -10,11 +10,11 @@
 
     public class SendGridEmailSender : IEmailSender
     {
-        private readonly SendGridClient client;
+        private readonly SendGridClient _client;
 
         public SendGridEmailSender(string apiKey)
         {
-            this.client = new SendGridClient(apiKey);
+            this._client = new SendGridClient(apiKey);
         }
 
         public async Task SendEmailAsync(string from, string fromName, string to, string subject, string htmlContent, IEnumerable<EmailAttachment> attachments = null)
@@ -37,7 +37,7 @@
 
             try
             {
-                var response = await this.client.SendEmailAsync(message);
+                var response = await this._client.SendEmailAsync(message);
                 Console.WriteLine(response.StatusCode);
                 Console.WriteLine(await response.Body.ReadAsStringAsync());
             }

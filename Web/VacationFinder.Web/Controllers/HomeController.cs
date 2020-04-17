@@ -11,16 +11,16 @@
 
     public class HomeController : BaseController
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
         public HomeController(ApplicationDbContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            this.ViewBag.SpecialOffers = await this.context.Offers.Where(x => x.IsSpecial && x.IsActive).ToListAsync();
+            this.ViewBag.SpecialOffers = await this._context.Offers.Where(x => x.IsSpecial && x.IsActive).ToListAsync();
 
             return this.View();
         }

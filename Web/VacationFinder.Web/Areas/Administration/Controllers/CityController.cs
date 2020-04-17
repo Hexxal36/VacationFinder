@@ -13,16 +13,16 @@
     [AutoValidateAntiforgeryToken]
     public class CityController : AdministrationController
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
         public CityController(ApplicationDbContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.context.Cities.ToListAsync());
+            return this.View(await this._context.Cities.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -32,7 +32,7 @@
                 return this.NotFound();
             }
 
-            var city = await this.context.Cities
+            var city = await this._context.Cities
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (city == null)
             {
@@ -45,7 +45,7 @@
         // GET: Admin/City/Create
         public async Task<IActionResult> Create()
         {
-            this.ViewBag.Countries = await this.context.Countries.ToListAsync();
+            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
 
             return this.View();
         }
@@ -62,8 +62,8 @@
 
             if (this.ModelState.IsValid)
             {
-                this.context.Add(city);
-                await this.context.SaveChangesAsync();
+                this._context.Add(city);
+                await this._context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
@@ -78,13 +78,13 @@
                 return this.NotFound();
             }
 
-            var city = await this.context.Cities.FindAsync(id);
+            var city = await this._context.Cities.FindAsync(id);
             if (city == null)
             {
                 return this.NotFound();
             }
 
-            this.ViewBag.Countries = await this.context.Countries.ToListAsync();
+            this.ViewBag.Countries = await this._context.Countries.ToListAsync();
 
             return this.View(city);
         }
@@ -105,8 +105,8 @@
             {
                 try
                 {
-                    this.context.Update(city);
-                    await this.context.SaveChangesAsync();
+                    this._context.Update(city);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -134,7 +134,7 @@
                 return this.NotFound();
             }
 
-            var city = await this.context.Cities
+            var city = await this._context.Cities
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (city == null)
             {
@@ -150,16 +150,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var city = await this.context.Cities.FindAsync(id);
+            var city = await this._context.Cities.FindAsync(id);
             city.IsDeleted = true;
             city.DeletedOn = DateTime.Now.AddHours(-3);
-            await this.context.SaveChangesAsync();
+            await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool CityExists(int id)
         {
-            return this.context.Cities.Any(e => e.Id == id);
+            return this._context.Cities.Any(e => e.Id == id);
         }
     }
 }

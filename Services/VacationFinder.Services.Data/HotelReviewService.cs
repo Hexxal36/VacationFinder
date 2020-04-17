@@ -11,12 +11,12 @@
 
     public class HotelReviewService : IHotelReviewService
     {
-        private readonly IDeletableEntityRepository<HotelReview> hotelReviewRepository;
+        private readonly IDeletableEntityRepository<HotelReview> _hotelReviewRepository;
 
         public HotelReviewService(
             IDeletableEntityRepository<HotelReview> hotelReviewRepository)
         {
-            this.hotelReviewRepository = hotelReviewRepository;
+            this._hotelReviewRepository = hotelReviewRepository;
         }
 
         public async Task CreateAsync(int grade, string title, string body, int hotelId, string userId)
@@ -30,27 +30,27 @@
                 UserId = userId,
             };
 
-            await this.hotelReviewRepository.AddAsync(hotelReview);
-            await this.hotelReviewRepository.SaveChangesAsync();
+            await this._hotelReviewRepository.AddAsync(hotelReview);
+            await this._hotelReviewRepository.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var hotelReview = this.hotelReviewRepository.All().Where(x => x.Id == id).ToList().First();
+            var hotelReview = this._hotelReviewRepository.All().Where(x => x.Id == id).ToList().First();
 
-            this.hotelReviewRepository.Delete(hotelReview);
+            this._hotelReviewRepository.Delete(hotelReview);
 
-            await this.hotelReviewRepository.SaveChangesAsync();
+            await this._hotelReviewRepository.SaveChangesAsync();
         }
 
         public IEnumerable<HotelReview> GetAllReviews()
         {
-            return this.hotelReviewRepository.All().ToList();
+            return this._hotelReviewRepository.All().ToList();
         }
 
         public HotelReview GetReviewById(int id)
         {
-            HotelReview review = this.hotelReviewRepository.All().Where(x => x.Id == id).ToList().First();
+            HotelReview review = this._hotelReviewRepository.All().Where(x => x.Id == id).ToList().First();
 
             return review;
         }

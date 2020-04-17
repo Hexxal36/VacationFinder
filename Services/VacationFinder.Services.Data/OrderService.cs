@@ -11,12 +11,12 @@
 
     public class OrderService : IOrderService
     {
-        private readonly IDeletableEntityRepository<Order> orderRepository;
+        private readonly IDeletableEntityRepository<Order> _orderRepository;
 
         public OrderService(
             IDeletableEntityRepository<Order> orderRepository)
         {
-            this.orderRepository = orderRepository;
+            this._orderRepository = orderRepository;
         }
 
         public async Task CreateAsync(string email, int offerId, string userId)
@@ -29,22 +29,22 @@
                 UserId = userId,
             };
 
-            await this.orderRepository.AddAsync(order);
-            await this.orderRepository.SaveChangesAsync();
+            await this._orderRepository.AddAsync(order);
+            await this._orderRepository.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var order = this.orderRepository.All().Where(x => x.Id == id).ToList().First();
+            var order = this._orderRepository.All().Where(x => x.Id == id).ToList().First();
 
-            this.orderRepository.Delete(order);
+            this._orderRepository.Delete(order);
 
-            await this.orderRepository.SaveChangesAsync();
+            await this._orderRepository.SaveChangesAsync();
         }
 
         public IEnumerable<Order> GetAllByUser(string userId)
         {
-            return this.orderRepository.All().Where(x => x.UserId == userId).ToList();
+            return this._orderRepository.All().Where(x => x.UserId == userId).ToList();
         }
     }
 }

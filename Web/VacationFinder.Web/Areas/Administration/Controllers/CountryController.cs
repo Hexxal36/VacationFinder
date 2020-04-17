@@ -14,16 +14,16 @@
     [AutoValidateAntiforgeryToken]
     public class CountryController : AdministrationController
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
         public CountryController(ApplicationDbContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.context.Countries.ToListAsync());
+            return this.View(await this._context.Countries.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -33,7 +33,7 @@
                 return this.NotFound();
             }
 
-            var country = await this.context.Countries
+            var country = await this._context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (country == null)
             {
@@ -61,8 +61,8 @@
 
             if (this.ModelState.IsValid)
             {
-                this.context.Add(country);
-                await this.context.SaveChangesAsync();
+                this._context.Add(country);
+                await this._context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
@@ -77,7 +77,7 @@
                 return this.NotFound();
             }
 
-            var country = await this.context.Countries.FindAsync(id);
+            var country = await this._context.Countries.FindAsync(id);
             if (country == null)
             {
                 return this.NotFound();
@@ -102,8 +102,8 @@
             {
                 try
                 {
-                    this.context.Update(country);
-                    await this.context.SaveChangesAsync();
+                    this._context.Update(country);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,7 +131,7 @@
                 return this.NotFound();
             }
 
-            var country = await this.context.Countries
+            var country = await this._context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (country == null)
             {
@@ -147,16 +147,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var country = await this.context.Countries.FindAsync(id);
+            var country = await this._context.Countries.FindAsync(id);
             country.IsDeleted = true;
             country.DeletedOn = DateTime.Now.AddHours(-3);
-            await this.context.SaveChangesAsync();
+            await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool CountryExists(int id)
         {
-            return this.context.Countries.Any(e => e.Id == id);
+            return this._context.Countries.Any(e => e.Id == id);
         }
     }
 }

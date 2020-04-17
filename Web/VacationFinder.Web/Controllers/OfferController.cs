@@ -13,12 +13,12 @@
 
     public class OfferController : Controller
     {
-        private readonly IOfferService offerService;
+        private readonly IOfferService _offerService;
 
         public OfferController(
              IOfferService offerService)
         {
-            this.offerService = offerService;
+            this._offerService = offerService;
         }
 
         public IActionResult Index()
@@ -28,7 +28,7 @@
 
         public IActionResult Details(int id)
         {
-            Offer offer = this.offerService.GetOfferById(id);
+            Offer offer = this._offerService.GetOfferById(id);
 
             var viewModel = new OfferViewModel
             {

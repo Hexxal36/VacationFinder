@@ -9,21 +9,21 @@
 
     public class SettingsService : ISettingsService
     {
-        private readonly IDeletableEntityRepository<Setting> settingsRepository;
+        private readonly IDeletableEntityRepository<Setting> _settingsRepository;
 
         public SettingsService(IDeletableEntityRepository<Setting> settingsRepository)
         {
-            this.settingsRepository = settingsRepository;
+            this._settingsRepository = settingsRepository;
         }
 
         public int GetCount()
         {
-            return this.settingsRepository.All().Count();
+            return this._settingsRepository.All().Count();
         }
 
         public IEnumerable<T> GetAll<T>()
         {
-            return this.settingsRepository.All().To<T>().ToList();
+            return this._settingsRepository.All().To<T>().ToList();
         }
     }
 }

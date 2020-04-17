@@ -8,18 +8,18 @@
 
     public class HotelService : IHotelService
     {
-        private readonly IDeletableEntityRepository<Hotel> hotelRepository;
+        private readonly IDeletableEntityRepository<Hotel> _hotelRepository;
 
         public HotelService(
             IDeletableEntityRepository<Hotel> hotelRepository)
         {
-            this.hotelRepository = hotelRepository;
+            this._hotelRepository = hotelRepository;
         }
 
         public IEnumerable<Hotel> GetAllHotels()
         {
             List<Hotel> query =
-                this.hotelRepository.All().Where(x => x.IsActive).OrderByDescending(x => x.CreatedOn).ToList();
+                this._hotelRepository.All().Where(x => x.IsActive).OrderByDescending(x => x.CreatedOn).ToList();
 
             return query;
         }
@@ -48,7 +48,7 @@
 
         public Hotel? GetHotelById(int id)
         {
-            Hotel hotel = this.hotelRepository.All().Where(x => x.Id == id).ToList().First();
+            Hotel hotel = this._hotelRepository.All().Where(x => x.Id == id).ToList().First();
 
             if (this.IsHotelActive(hotel))
             {

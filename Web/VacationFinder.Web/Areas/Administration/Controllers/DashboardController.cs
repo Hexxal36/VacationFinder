@@ -6,16 +6,16 @@
 
     public class DashboardController : AdministrationController
     {
-        private readonly ISettingsService settingsService;
+        private readonly ISettingsService _settingsService;
 
         public DashboardController(ISettingsService settingsService)
         {
-            this.settingsService = settingsService;
+            this._settingsService = settingsService;
         }
 
         public IActionResult Index()
         {
-            var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
+            var viewModel = new IndexViewModel { SettingsCount = this._settingsService.GetCount(), };
             return this.View(viewModel);
         }
     }
