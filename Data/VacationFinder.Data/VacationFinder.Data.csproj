@@ -19,6 +19,8 @@
     <Compile Remove="Migrations\20200417135055_UpdateOfferUser.Designer.cs" />
     <Compile Remove="Migrations\20200417135300_UpdatedOfferUsers.cs" />
     <Compile Remove="Migrations\20200417135300_UpdatedOfferUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200417203811_UserMigration.cs" />
+    <Compile Remove="Migrations\20200417203811_UserMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
