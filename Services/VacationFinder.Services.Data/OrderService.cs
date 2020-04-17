@@ -35,9 +35,9 @@
 
         public async Task DeleteAsync(int id)
         {
-            var offerUser = this.orderRepository.All().Where(x => x.Id == id).ToList().First();
+            var order = this.orderRepository.All().Where(x => x.Id == id).ToList().First();
 
-            this.orderRepository.Delete(offerUser);
+            this.orderRepository.Delete(order);
 
             await this.orderRepository.SaveChangesAsync();
         }

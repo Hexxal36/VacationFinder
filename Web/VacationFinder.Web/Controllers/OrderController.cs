@@ -33,5 +33,15 @@
 
             return this.RedirectToAction("Details", "Offer", new { id = viewModel.OfferId });
         }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int orderId)
+        {
+            await this.orderService.DeleteAsync(orderId);
+
+            return this.RedirectToAction("ShowOrders", "User");
+        }
     }
 }

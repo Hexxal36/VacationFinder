@@ -1,0 +1,49 @@
+﻿@model IEnumerable<VacationFinder.Data.Models.Order>
+
+@{
+    ViewData["Title"] = "ShowOrders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Show Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IsApproved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Offer)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsApproved)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Offer.Title)
+                </td>
+                <td>
+                    <form method="post" asp-area="" asp-controller="Order" asp-action="Delete">
+                        <input type="hidden" value="@item.Id" name="orderId"/>
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit">Cancel Order</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
