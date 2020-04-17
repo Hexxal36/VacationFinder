@@ -1,22 +1,28 @@
 ﻿namespace VacationFinder.Web.Areas.Administration.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+
+    using VacationFinder.Common;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
+    using VacationFinder.Services.Messaging;
 
     public class OrderController : AdministrationController
     {
         private readonly ApplicationDbContext context;
+        private readonly IEmailSender emailSender;
 
-        public OrderController(ApplicationDbContext context)
+        public OrderController(
+            ApplicationDbContext context,
+            IEmailSender emailSender)
         {
             this.context = context;
+            this.emailSender = emailSender;
         }
 
         public async Task<IActionResult> Index()
@@ -81,6 +87,13 @@
 
                 this.context.Update(order);
                 await this.context.SaveChangesAsync();
+
+                await this.emailSender.SendEmailAsync(
+                    EmailConstants.From,
+                    "Admin",
+                    order.ContactEmail,
+                    EmailConstants.Subject,
+                    EmailConstants.Body);
             }
 
             return this.View(order);

@@ -33,6 +33,7 @@
                 <p>Hotel: @Model.Hotel.Name</p>
                 <p>Transport: @Model.Transport.Title</p>
                 <p>Tag: @Model.Tag.Title</p>
+                <p>Price: @Model.Price @VacationFinder.Common.GlobalConstants.DefaultCurrency</p>
             </div>
             @Html.Raw(Model.Description)
             @Html.Raw(Model.Hotel.Description)

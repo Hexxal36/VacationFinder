@@ -11,7 +11,7 @@
         <div class="special-offer-info">
             <p class="special-offer-title">@offer.Title</p>
             <a asp-controller="Offer" asp-action="Details" asp-route-id="@offer.Id" class="special-offer-details">Details</a>
-            <p class="special-offer-price">Only for <b>@offer.Price.ToString("f2") USD</b></p>
+            <p class="special-offer-price">Only for <b>@offer.Price.ToString("f2") @VacationFinder.Common.GlobalConstants.DefaultCurrency</b></p>
             <p class="special-offer-duration">
                 @offer.Days
                 <span class="icon-radio-unchecked"></span>/
@@ -32,19 +32,6 @@
 
 
 <p class="title-p">Find the vacation, you always wanted with the help of the VacationFinder</p>
-
-@*Make the news controller, model and administration*@
-<div>
-    <div>
-
-    </div>
-    <div>
-
-    </div>
-    <div>
-
-    </div>
-</div>
 
 @section Styles 
 {

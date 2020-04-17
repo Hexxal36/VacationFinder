@@ -7,5 +7,7 @@
         public const string AdministratorRoleName = "Administrator";
 
         public const string DefaultUserRoleName = "User";
+
+        public const string DefaultCurrency = "USD";
     }
 }

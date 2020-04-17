@@ -10,6 +10,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using VacationFinder.Common;
     using VacationFinder.Data;
     using VacationFinder.Data.Common;
     using VacationFinder.Data.Common.Repositories;
@@ -60,7 +61,7 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(EmailConstants.SendGridApiKey));
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IOfferService, OfferService>();
             services.AddTransient<IHotelService, HotelService>();
