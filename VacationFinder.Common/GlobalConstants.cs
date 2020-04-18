@@ -4,6 +4,8 @@
     {
         public const string SystemName = "VacationFinder";
 
+        public const string SuperAdministratorRoleName = "SuperAdministrator";
+
         public const string AdministratorRoleName = "Administrator";
 
         public const string DefaultUserRoleName = "User";

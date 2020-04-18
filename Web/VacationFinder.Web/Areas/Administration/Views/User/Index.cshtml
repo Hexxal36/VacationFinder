@@ -1,0 +1,64 @@
+﻿@model IEnumerable<VacationFinder.Web.ViewModels.Administration.User.UserViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                Role
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    <div style="display:flex;">
+                    @if(item.RoleName != "SuperAdmin")
+                    {
+                        <form method="post" asp-area="Administration" asp-controller="User" asp-action="MakeAdmin">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" value="@item.Id" name="id" />
+                            @if (item.RoleName != "Admin")
+                            {
+                                <button type="submit">
+                                    Make Admin
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit">
+                                    Remove Admin
+                                </button>
+                            }
+                        </form>@:|
+                        <form method="post" asp-area="Administration" asp-controller="User" asp-action="Delete">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" value="@item.Id" name="id" />
+                            
+                            <button type="submit">Delete</button>
+                        </form>
+                    }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

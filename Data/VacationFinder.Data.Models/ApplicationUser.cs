@@ -16,7 +16,7 @@ namespace VacationFinder.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.HotelReviews = new HashSet<HotelReview>();
-            this.OfferUsers = new HashSet<Order>();
+            this.Orders = new HashSet<Order>();
         }
 
         // Audit info
@@ -37,6 +37,6 @@ namespace VacationFinder.Data.Models
 
         public virtual ICollection<HotelReview> HotelReviews { get; set; }
 
-        public virtual ICollection<Order> OfferUsers { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@model VacationFinder.Web.ViewModels.Offer.OfferViewModel
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Details";
@@ -47,14 +48,21 @@
         </div>
 
         <div id="offer-panel-signup" style="display:none;">
-            <form method="post" asp-controller="Order" asp-action="Create">
-                <p>Please enter a valid email and we will send you a messege when your application is approved.</p>
+            @if(User.Identity.IsAuthenticated)
+            {
+                <form method="post" asp-controller="Order" asp-action="Create">
+                    <p>Please enter a valid email and we will send you a messege when your application is approved.</p>
 
-                <input type="email" value="" name="email" />
-                <input type="hidden" value="@Model.Id" name="OfferId" />
+                    <input type="email" value="" name="email" />
+                    <input type="hidden" value="@Model.Id" name="OfferId" />
 
-                <button type="submit">Sign up</button>
-            </form>
+                    <button type="submit">Sign up</button>
+                </form>
+            }
+            else  
+            {
+                <p>To get this offer, sign up.</p>
+            }
         </div>
     </div>
 </div>
