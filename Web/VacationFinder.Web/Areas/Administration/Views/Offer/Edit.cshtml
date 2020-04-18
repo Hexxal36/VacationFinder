@@ -34,6 +34,11 @@
                 <input asp-for="Nights" class="form-control" />
                 <span asp-validation-for="Nights" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Places" class="control-label"></label>
+                <input asp-for="Places" class="form-control" />
+                <span asp-validation-for="Places" class="text-danger"></span>
+            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)

@@ -58,7 +58,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Title, Price, Id, IsActive, Days, Nights, IsSpecial, Active_From, Active_Until, Description, HotelId, TagId, TransportId")] Offer offer)
+            [Bind("Title, Price, Id, IsActive, Days, Nights, Places, IsSpecial, Active_From, Active_Until, Description, HotelId, TagId, TransportId")] Offer offer)
         {
             offer.CreatedOn = DateTime.Now.AddHours(-3);
             offer.IsDeleted = false;
@@ -100,7 +100,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
-            int id, [Bind("Title, Price, Id, IsActive, Days, Nights, IsSpecial, Active_From, Active_Until, Description, HotelId, TagId, TransportId")] Offer offer)
+            int id, [Bind("Title, Price, Id, IsActive, Days, Nights, Places, IsSpecial, Active_From, Active_Until, Description, HotelId, TagId, TransportId")] Offer offer)
         {
             if (id != offer.Id)
             {

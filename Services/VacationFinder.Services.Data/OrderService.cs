@@ -19,18 +19,21 @@
             this._orderRepository = orderRepository;
         }
 
-        public async Task CreateAsync(string email, int offerId, string userId)
+        public async Task<Order> CreateAsync(string email, int places, int offerId, string userId)
         {
             var order = new Order
             {
                 IsApproved = false,
                 ContactEmail = email,
+                Places = places,
                 OfferId = offerId,
                 UserId = userId,
             };
 
             await this._orderRepository.AddAsync(order);
             await this._orderRepository.SaveChangesAsync();
+
+            return order;
         }
 
         public async Task DeleteAsync(int id)
@@ -45,6 +48,13 @@
         public IEnumerable<Order> GetAllByUser(string userId)
         {
             return this._orderRepository.All().Where(x => x.UserId == userId).ToList();
+        }
+
+        public Order GetOrderById(int id)
+        {
+            Order order = this._orderRepository.All().Where(x => x.Id == id).ToList().First();
+
+            return order;
         }
     }
 }

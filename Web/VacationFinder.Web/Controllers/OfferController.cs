@@ -32,16 +32,7 @@
 
             var viewModel = new OfferViewModel
             {
-                Title = offer.Title,
-                Days = offer.Days,
-                Description = offer.Description,
-                Hotel = offer.Hotel,
-                Id = offer.Id,
-                IsSpecial = offer.IsSpecial,
-                Nights = offer.Nights,
-                Price = offer.Price,
-                Tag = offer.Tag,
-                Transport = offer.Transport,
+                Offer = offer,
                 OfferImages = offer.Images,
             };
 

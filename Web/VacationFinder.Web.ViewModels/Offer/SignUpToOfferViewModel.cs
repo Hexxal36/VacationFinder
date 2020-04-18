@@ -13,5 +13,9 @@
 
         [Required]
         public int OfferId { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int Places { get; set; }
     }
 }

@@ -9,10 +9,12 @@
 
     public interface IOrderService
     {
-        Task CreateAsync(string email, int offerId, string userId);
+        Task<Order> CreateAsync(string email, int places, int offerId, string userId);
 
         Task DeleteAsync(int id);
 
         IEnumerable<Order> GetAllByUser(string userId);
+
+        Order GetOrderById(int id);
     }
 }

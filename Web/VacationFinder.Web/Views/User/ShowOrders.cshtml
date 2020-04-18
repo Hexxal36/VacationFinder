@@ -17,6 +17,9 @@
                 @Html.DisplayNameFor(model => model.ContactEmail)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Places)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Offer)
             </th>
             <th></th>
@@ -25,25 +28,28 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsApproved)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ContactEmail)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Offer.Title)
-                </td>
-                <td>
-                    <form method="post" asp-area="" asp-controller="Order" asp-action="Delete">
-                        <input type="hidden" value="@item.Id" name="orderId"/>
-                        @Html.AntiForgeryToken()
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsApproved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactEmail)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Places)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Offer.Title)
+            </td>
+            <td>
+                <form method="post" asp-area="" asp-controller="Order" asp-action="Delete">
+                    <input type="hidden" value="@item.Id" name="orderId" />
+                    @Html.AntiForgeryToken()
 
-                        <button type="submit">Cancel Order</button>
-                    </form>
-                </td>
-            </tr>
+                    <button type="submit">Cancel Order</button>
+                </form>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -20,6 +20,9 @@
                 @Html.DisplayNameFor(model => model.ContactEmail)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Places)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Offer)
             </th>
             <th>
@@ -31,24 +34,27 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsApproved)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ContactEmail)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Offer.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.UserName)
-                </td>
-                <td>
-                    <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsApproved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Places)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Offer.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td>
+            <td>
+                <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
