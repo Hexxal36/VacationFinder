@@ -20,7 +20,7 @@
             this._orderRepository = orderRepository;
         }
 
-        public IEnumerable<Offer> GetOffers()
+        public IEnumerable<Offer> GetAllOffers()
         {
             List<Offer> query =
                 this._offerRepository.All().Where(x => x.IsActive).OrderByDescending(x => x.CreatedOn).ToList();
@@ -48,26 +48,30 @@
             return null;
         }
 
-        public async Task OnOrder(int offerId, int orderId)
+        public async Task OnOrderAsync(int offerId, int orderId)
         {
             var offer = this.GetOfferById(offerId);
 
             var order = this._orderRepository.All().Where(x => x.Id == orderId).ToList().First();
 
-            offer.Places -= order.Places;
-
-            await this._offerRepository.SaveChangesAsync();
+            if (offer.IsActive)
+            {
+                offer.Places -= order.Places;
+                await this._offerRepository.SaveChangesAsync();
+            }
         }
 
-        public async Task OnOrderDelete(int offerId, int orderId)
+        public async Task OnOrderDeleteAsync(int offerId, int orderId)
         {
             var offer = this.GetOfferById(offerId);
 
             var order = this._orderRepository.All().Where(x => x.Id == orderId).ToList().First();
 
-            offer.Places += order.Places;
-
-            await this._offerRepository.SaveChangesAsync();
+            if (offer.IsActive)
+            {
+                offer.Places += order.Places;
+                await this._offerRepository.SaveChangesAsync();
+            }
         }
 
         private bool IsOfferActive(Offer offer)

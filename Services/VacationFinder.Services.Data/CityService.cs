@@ -26,9 +26,13 @@
 
         public City GetCityById(int id)
         {
-            City city = this._cityRepository.All().Where(x => x.Id == id).ToList().First();
+            var cities = this._cityRepository.All().Where(x => x.Id == id).ToList();
+            if (cities.Count == 0)
+            {
+                return null;
+            }
 
-            return city;
+            return cities.First();
         }
     }
 }

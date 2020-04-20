@@ -37,7 +37,7 @@
                 offer.Places >= viewModel.Places)
             {
                 var order = await this._orderService.CreateAsync(viewModel.Email, viewModel.Places, viewModel.OfferId, userId);
-                await this._offerService.OnOrder(viewModel.OfferId, order.Id);
+                await this._offerService.OnOrderAsync(viewModel.OfferId, order.Id);
             }
 
             return this.RedirectToAction("Details", "Offer", new { id = viewModel.OfferId });
@@ -50,7 +50,7 @@
         {
             var order = this._orderService.GetOrderById(orderId);
 
-            await this._offerService.OnOrderDelete(order.OfferId, orderId);
+            await this._offerService.OnOrderDeleteAsync(order.OfferId, orderId);
 
             await this._orderService.DeleteAsync(orderId);
 

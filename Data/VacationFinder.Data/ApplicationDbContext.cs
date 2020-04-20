@@ -22,9 +22,6 @@
             : base(options)
         {
         }
-
-        public DbSet<Setting> Settings { get; set; }
-
         public DbSet<Tag> Tags { get; set; }
 
         public DbSet<Transport> Transports { get; set; }

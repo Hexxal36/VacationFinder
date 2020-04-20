@@ -25,16 +25,15 @@
 
         public IActionResult Index(HotelFilterViewModel filter)
         {
-            var hotels = this._hotelService.GetAllHotels();
             var cities = this._cityService.GetAllCities();
 
             var viewModel = new HotelListViewModel
             {
-                Hotels = hotels,
+                Hotels = this._hotelService.GetAllHotels(),
                 Cities = cities,
             };
 
-            viewModel.Hotels = this._hotelService.FilterHotels(hotels, filter.Name, filter.Stars, filter.City);
+            viewModel.Hotels = this._hotelService.FilterHotels(filter.Name, filter.Stars, filter.City);
 
             return this.View(viewModel);
         }

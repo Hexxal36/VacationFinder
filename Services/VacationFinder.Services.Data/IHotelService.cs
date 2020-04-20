@@ -12,7 +12,7 @@
 
         #nullable enable
 
-        IEnumerable<Hotel> FilterHotels(IEnumerable<Hotel> hotels, string? name, int stars, City? city);
+        IEnumerable<Hotel> FilterHotels(string? name, int stars, City? city);
 
         Hotel? GetHotelById(int id);
     }

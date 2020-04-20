@@ -13,7 +13,7 @@
         public Offer()
         {
             this.Images = new HashSet<OfferImage>();
-            this.OfferUsers = new HashSet<Order>();
+            this.Orders = new HashSet<Order>();
         }
 
         [Required]
@@ -62,6 +62,6 @@
 
         public virtual ICollection<OfferImage> Images { get; set; }
 
-        public virtual ICollection<Order> OfferUsers { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

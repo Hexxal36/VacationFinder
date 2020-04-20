@@ -8,11 +8,11 @@
     {
         IEnumerable<Offer> GetSpecialOffers();
 
-        IEnumerable<Offer> GetOffers();
+        IEnumerable<Offer> GetAllOffers();
 
-        Task OnOrder(int offerId, int orderId);
+        Task OnOrderAsync(int offerId, int orderId);
 
-        Task OnOrderDelete(int offerId, int orderId);
+        Task OnOrderDeleteAsync(int offerId, int orderId);
 
         Offer GetOfferById(int id);
     }

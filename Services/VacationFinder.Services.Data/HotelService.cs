@@ -26,8 +26,10 @@
 
         #nullable enable
 
-        public IEnumerable<Hotel> FilterHotels(IEnumerable<Hotel> hotels, string? name, int stars, City? city)
+        public IEnumerable<Hotel> FilterHotels(string? name, int stars, City? city)
         {
+            var hotels = this.GetAllHotels();
+
             if (name != null)
             {
                 hotels = hotels.Where(x => x.Name.Contains(name));
@@ -43,7 +45,11 @@
                 hotels = hotels.Where(x => x.City.Id == city.Id);
             }
 
-            return hotels.ToList();
+            if (hotels != null)
+            {
+                return hotels.ToList();
+            }
+            return null;
         }
 
         public Hotel? GetHotelById(int id)
