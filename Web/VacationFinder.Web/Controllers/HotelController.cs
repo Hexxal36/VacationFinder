@@ -40,21 +40,28 @@
 
         public IActionResult Details(int id)
         {
-            var hotel = this._hotelService.GetHotelById(id);
-            var reviews = hotel.HotelReviews;
-
-            var viewModel = new HotelViewModel
+            try
             {
-                Id = hotel.Id,
-                Name = hotel.Name,
-                Stars = hotel.Stars,
-                Description = hotel.Description,
-                ImageUrl = hotel.ImageUrl,
-                Offers = hotel.Offers.ToList(),
-                HotelReviews = reviews,
-            };
+                var hotel = this._hotelService.GetHotelById(id);
+                var reviews = hotel.HotelReviews;
 
-            return this.View(viewModel);
+                var viewModel = new HotelViewModel
+                {
+                    Id = hotel.Id,
+                    Name = hotel.Name,
+                    Stars = hotel.Stars,
+                    Description = hotel.Description,
+                    ImageUrl = hotel.ImageUrl,
+                    Offers = hotel.Offers.ToList(),
+                    HotelReviews = reviews,
+                };
+
+                return this.View(viewModel);
+            }
+            catch
+            {
+                return this.RedirectToAction("Index");
+            }
         }
     }
 }

@@ -148,7 +148,7 @@
         {
             var tag = await this._context.Tags.FindAsync(id);
             tag.IsDeleted = true;
-            tag.DeletedOn = DateTime.Now.AddHours(-3);
+            tag.DeletedOn = DateTime.UtcNow;
             await this._context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }

@@ -62,7 +62,6 @@
 
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(EmailConstants.SendGridApiKey));
-            services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IOfferService, OfferService>();
             services.AddTransient<IHotelService, HotelService>();
             services.AddTransient<ICityService, CityService>();

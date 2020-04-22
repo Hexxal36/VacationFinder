@@ -81,20 +81,27 @@
         {
             Order order = await this._context.Orders.FindAsync(id);
 
-            if (order != null)
+            if (order == null)
             {
-                order.IsApproved = true;
-
-                this._context.Update(order);
-                await this._context.SaveChangesAsync();
-
-                await this.emailSender.SendEmailAsync(
-                    EmailConstants.From,
-                    "Admin",
-                    order.ContactEmail,
-                    EmailConstants.Subject,
-                    EmailConstants.Body);
+                return this.NotFound();
             }
+
+            if (order.IsApproved == true)
+            {
+                throw new InvalidOperationException();
+            }
+
+            order.IsApproved = true;
+
+            this._context.Update(order);
+            await this._context.SaveChangesAsync();
+
+            await this.emailSender.SendEmailAsync(
+                EmailConstants.From,
+                "Admin",
+                order.ContactEmail,
+                EmailConstants.Subject,
+                EmailConstants.Body);
 
             return this.View(order);
         }
