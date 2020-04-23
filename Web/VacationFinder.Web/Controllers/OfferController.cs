@@ -21,22 +21,24 @@
             this._offerService = offerService;
         }
 
-        public IActionResult Index()
-        {
-            return this.View();
-        }
-
         public IActionResult Details(int id)
         {
-            Offer offer = this._offerService.GetOfferById(id);
-
-            var viewModel = new OfferViewModel
+            try
             {
-                Offer = offer,
-                OfferImages = offer.Images,
-            };
+                Offer offer = this._offerService.GetOfferById(id);
 
-            return this.View(viewModel);
+                var viewModel = new OfferViewModel
+                {
+                    Offer = offer,
+                    OfferImages = offer.Images,
+                };
+
+                return this.View(viewModel);
+            }
+            catch
+            {
+                return this.NotFound();
+            }
         }
     }
 }

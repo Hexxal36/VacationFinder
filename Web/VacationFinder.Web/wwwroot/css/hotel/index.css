@@ -40,6 +40,14 @@
     text-align: center;
 }
 
+.hotel-stars {
+    position: relative;
+    top: 40px;
+    background: wheat;
+    height: fit-content;
+    width: fit-content;
+}
+
 .hotel-image {
     max-width: 320px;
     max-height: 320px;

@@ -16,14 +16,16 @@
     using VacationFinder.Services.Data;
     using Xunit;
 
-    public class HotelControllerTests : IClassFixture<WebApplicationFactory<Startup>>
+    public class OfferControllerTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> server;
         private readonly ApplicationDbContext context;
 
-        public HotelControllerTests(
+        public OfferControllerTests(
             WebApplicationFactory<Startup> server)
         {
+            this.server = server;
+
             this.server = server;
             this.context = new ApplicationDbContext(
                new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -60,42 +62,64 @@
                 });
             }
 
+            if (this.context.Tags.Count() == 0)
+            {
+                this.context.Tags.Add(new Tag()
+                {
+                    Title = "TestingTag",
+                    Sort = 1,
+                    IsActive = true,
+                });
+            }
+
+            if (this.context.Transports.Count() == 0)
+            {
+                this.context.Transports.Add(new Transport()
+                {
+                    Sort = 1,
+                    Title = "TestingTransport",
+                    IsActive = true,
+                });
+            }
+
+            if (this.context.Offers.Count() == 0)
+            {
+                this.context.Add(new Offer()
+                {
+                    Title = "TestingOffer",
+                    Days = 1,
+                    Nights = 1,
+                    Places = 1,
+                    Price = 1,
+                    TagId = this.context.Tags.First().Id,
+                    HotelId = this.context.Hotels.First().Id,
+                    TransportId = this.context.Transports.First().Id,
+                    Description = "test",
+                    IsActive = true,
+                });
+            }
+
             this.context.SaveChanges();
         }
 
         [Fact]
-        public async Task FilteredHotelsShouldAllHaveTheFilteredCharacteristic()
+        public async Task DetailsShouldReturnCorrectPageIfOfferExists()
         {
-            var client = this.server.CreateClient();
-            var response = await client.GetAsync("/Hotel?name=&stars=3&city=");
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            var hotelStarsString = "<p class=\"hotel-stars\">3";
-            var hotelAnchorString = "<a class=\"hotel-details-link\"";
-            Assert.Equal(
-                Regex.Matches(responseContent, hotelStarsString).Count(),
-                Regex.Matches(responseContent, hotelAnchorString).Count());
-        }
-
-        [Fact]
-        public async Task DetailsShouldReturnCorrectPageIfHotelExists()
-        {
-            var hotel = this.context.Hotels.First();
+            var offer = this.context.Offers.First();
 
             var client = this.server.CreateClient();
-            var response = await client.GetAsync("/Hotel/Details/" + hotel.Id);
+            var response = await client.GetAsync("/Offer/Details/" + offer.Id);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains(hotel.ImageUrl, responseContent);
+            Assert.Contains(offer.Price.ToString(), responseContent);
         }
 
         [Fact]
-        public async Task DetailsShouldReturnNotFoundIfHotelIdIsInvalid()
+        public async Task DetailsShouldRedirectToTheIndexPageIfOfferIdIsInvalid()
         {
             var client = this.server.CreateClient();
-            var response = await client.GetAsync("/Hotel/Details/-10");
+            var response = await client.GetAsync("/Offer/Details/-10");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }

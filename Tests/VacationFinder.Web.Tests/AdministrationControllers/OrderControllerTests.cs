@@ -9,6 +9,7 @@
     using VacationFinder.Common;
     using VacationFinder.Data;
     using VacationFinder.Data.Models;
+    using VacationFinder.Data.Models.Enums;
     using VacationFinder.Services.Messaging;
     using VacationFinder.Web.Areas.Administration.Controllers;
     using Xunit;
@@ -28,6 +29,73 @@
                 .Options);
             this.emailSender = new SendGridEmailSender(EmailConstants.SendGridApiKey);
 
+            if (this.context.Countries.Count() == 0)
+            {
+                this.context.Countries.Add(new Country()
+                {
+                    Name = "TestingCountry",
+                    Continent = Continent.Unknown,
+                });
+            }
+
+            if (this.context.Cities.Count() == 0)
+            {
+                this.context.Cities.Add(new City()
+                {
+                    Name = "TestingCity",
+                    CountryId = this.context.Countries.First().Id,
+                });
+            }
+
+            if (this.context.Hotels.Count() == 0)
+            {
+                this.context.Hotels.Add(new Hotel()
+                {
+                    Name = "TestingHotel",
+                    CityId = this.context.Cities.OrderBy(x => x.Id).First().Id,
+                    ImageUrl = "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
+                    Stars = 4,
+                    Description = "test",
+                });
+            }
+
+            if (this.context.Tags.Count() == 0)
+            {
+                this.context.Tags.Add(new Tag()
+                {
+                    Title = "TestingTag",
+                    Sort = 1,
+                    IsActive = true,
+                });
+            }
+
+            if (this.context.Transports.Count() == 0)
+            {
+                this.context.Transports.Add(new Transport()
+                {
+                    Sort = 1,
+                    Title = "TestingTransport",
+                    IsActive = true,
+                });
+            }
+
+            if (this.context.Offers.Count() == 0)
+            {
+                this.context.Add(new Offer()
+                {
+                    Title = "TestingOffer",
+                    Days = 1,
+                    Nights = 1,
+                    Places = 1,
+                    Price = 1,
+                    TagId = this.context.Tags.First().Id,
+                    HotelId = this.context.Hotels.First().Id,
+                    TransportId = this.context.Transports.First().Id,
+                    Description = "test",
+                    IsActive = true,
+                });
+            }
+
             if (this.context.Orders.Where(x => x.ContactEmail == "TestingOrder@mail.com").Count() == 0)
             {
                 this.context.Orders.Add(new Order()
@@ -39,8 +107,9 @@
                     IsApproved = false,
                 });
 
-                this.context.SaveChanges();
             }
+            
+            this.context.SaveChanges();
         }
 
         [Fact]

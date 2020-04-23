@@ -35,6 +35,7 @@
         @foreach (var item in Model.Hotels)
         {
             <a asp-action="Details" asp-route-id="@item.Id" class="hotel-details-link">
+                <p class="hotel-stars">@item.Stars ★</p>
                 <img src="@item.ImageUrl" class="hotel-image" />
                 <p class="hotel-info">@item.Name, @item.City.Name</p>
             </a>
