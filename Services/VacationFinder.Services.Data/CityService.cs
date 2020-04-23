@@ -8,25 +8,25 @@
 
     public class CityService : ICityService
     {
-        private readonly IDeletableEntityRepository<City> _cityRepository;
+        private readonly IDeletableEntityRepository<City> cityRepository;
 
         public CityService(
             IDeletableEntityRepository<City> cityRepository)
         {
-            this._cityRepository = cityRepository;
+            this.cityRepository = cityRepository;
         }
 
         public IEnumerable<City> GetAllCities()
         {
             List<City> query =
-                this._cityRepository.All().OrderByDescending(x => x.CreatedOn).ToList();
+                this.cityRepository.All().OrderByDescending(x => x.CreatedOn).ToList();
 
             return query;
         }
 
         public City GetCityById(int id)
         {
-            var cities = this._cityRepository.All().Where(x => x.Id == id).ToList();
+            var cities = this.cityRepository.All().Where(x => x.Id == id).ToList();
             if (cities.Count == 0)
             {
                 return null;

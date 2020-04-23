@@ -9,21 +9,21 @@
 
     public class OfferService : IOfferService
     {
-        private readonly IDeletableEntityRepository<Offer> _offerRepository;
-        private readonly IDeletableEntityRepository<Order> _orderRepository;
+        private readonly IDeletableEntityRepository<Offer> offerRepository;
+        private readonly IDeletableEntityRepository<Order> orderRepository;
 
         public OfferService(
             IDeletableEntityRepository<Offer> offerRepository,
             IDeletableEntityRepository<Order> orderRepository)
         {
-            this._offerRepository = offerRepository;
-            this._orderRepository = orderRepository;
+            this.offerRepository = offerRepository;
+            this.orderRepository = orderRepository;
         }
 
         public IEnumerable<Offer> GetAllOffers()
         {
             List<Offer> query =
-                this._offerRepository.All().Where(x => x.IsActive).OrderByDescending(x => x.CreatedOn).ToList();
+                this.offerRepository.All().Where(x => x.IsActive).OrderByDescending(x => x.CreatedOn).ToList();
 
             return query;
         }
@@ -31,14 +31,14 @@
         public IEnumerable<Offer> GetSpecialOffers()
         {
             List<Offer> query =
-                this._offerRepository.All().Where(x => x.IsActive && x.IsSpecial).OrderByDescending(x => x.CreatedOn).ToList();
+                this.offerRepository.All().Where(x => x.IsActive && x.IsSpecial).OrderByDescending(x => x.CreatedOn).ToList();
 
             return query;
         }
 
         public Offer GetOfferById(int id)
         {
-            Offer offer = this._offerRepository.All().Where(x => x.Id == id).ToList().First();
+            Offer offer = this.offerRepository.All().Where(x => x.Id == id).ToList().First();
 
             if (this.IsOfferActive(offer))
             {
@@ -52,12 +52,12 @@
         {
             var offer = this.GetOfferById(offerId);
 
-            var order = this._orderRepository.All().Where(x => x.Id == orderId).ToList().First();
+            var order = this.orderRepository.All().Where(x => x.Id == orderId).ToList().First();
 
             if (offer.IsActive)
             {
                 offer.Places -= order.Places;
-                await this._offerRepository.SaveChangesAsync();
+                await this.offerRepository.SaveChangesAsync();
             }
         }
 
@@ -65,12 +65,12 @@
         {
             var offer = this.GetOfferById(offerId);
 
-            var order = this._orderRepository.All().Where(x => x.Id == orderId).ToList().First();
+            var order = this.orderRepository.All().Where(x => x.Id == orderId).ToList().First();
 
             if (offer.IsActive)
             {
                 offer.Places += order.Places;
-                await this._offerRepository.SaveChangesAsync();
+                await this.offerRepository.SaveChangesAsync();
             }
         }
 

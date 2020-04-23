@@ -13,16 +13,16 @@
     [AutoValidateAntiforgeryToken]
     public class OfferController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         public OfferController(ApplicationDbContext context)
         {
-            this._context = context;
+            this.context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this._context.Offers.ToListAsync());
+            return this.View(await this.context.Offers.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -32,7 +32,7 @@
                 return this.NotFound();
             }
 
-            var offer = await this._context.Offers
+            var offer = await this.context.Offers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (offer == null)
             {
@@ -45,9 +45,9 @@
         // GET: Admin/Offer/Create
         public async Task<IActionResult> Create()
         {
-            this.ViewBag.Hotels = await this._context.Hotels.Where(x => x.IsActive).ToListAsync();
-            this.ViewBag.Tags = await this._context.Tags.Where(x => x.IsActive).ToListAsync();
-            this.ViewBag.Transports = await this._context.Transports.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Hotels = await this.context.Hotels.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Tags = await this.context.Tags.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Transports = await this.context.Transports.Where(x => x.IsActive).ToListAsync();
 
             return this.View();
         }
@@ -65,8 +65,8 @@
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(offer);
-                await this._context.SaveChangesAsync();
+                this.context.Add(offer);
+                await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
@@ -81,15 +81,15 @@
                 return this.NotFound();
             }
 
-            var offer = await this._context.Offers.FindAsync(id);
+            var offer = await this.context.Offers.FindAsync(id);
             if (offer == null)
             {
                 return this.NotFound();
             }
 
-            this.ViewBag.Hotels = await this._context.Hotels.Where(x => x.IsActive).ToListAsync();
-            this.ViewBag.Tags = await this._context.Tags.Where(x => x.IsActive).ToListAsync();
-            this.ViewBag.Transports = await this._context.Transports.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Hotels = await this.context.Hotels.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Tags = await this.context.Tags.Where(x => x.IsActive).ToListAsync();
+            this.ViewBag.Transports = await this.context.Transports.Where(x => x.IsActive).ToListAsync();
 
             return this.View(offer);
         }
@@ -111,8 +111,8 @@
             {
                 try
                 {
-                    this._context.Update(offer);
-                    await this._context.SaveChangesAsync();
+                    this.context.Update(offer);
+                    await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -140,7 +140,7 @@
                 return this.NotFound();
             }
 
-            var offer = await this._context.Offers
+            var offer = await this.context.Offers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (offer == null)
             {
@@ -156,16 +156,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var offer = await this._context.Offers.FindAsync(id);
+            var offer = await this.context.Offers.FindAsync(id);
             offer.IsDeleted = true;
             offer.DeletedOn = DateTime.Now.AddHours(-3);
-            await this._context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool OfferExists(int id)
         {
-            return this._context.Offers.Any(e => e.Id == id);
+            return this.context.Offers.Any(e => e.Id == id);
         }
     }
 }

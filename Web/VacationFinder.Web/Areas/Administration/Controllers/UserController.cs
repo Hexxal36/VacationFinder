@@ -16,20 +16,20 @@
 
     public class UserController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UserController(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager)
         {
-            this._context = context;
-            this._userManager = userManager;
+            this.context = context;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var users = await this._context.Users.ToListAsync();
+            var users = await this.context.Users.ToListAsync();
 
             var viewModel = new List<UserViewModel>();
 
@@ -37,11 +37,11 @@
             {
                 var roleName = "User";
 
-                if (await this._userManager.IsInRoleAsync(user, GlobalConstants.SuperAdministratorRoleName))
+                if (await this.userManager.IsInRoleAsync(user, GlobalConstants.SuperAdministratorRoleName))
                 {
                     roleName = "SuperAdmin";
                 }
-                else if (await this._userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName))
+                else if (await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName))
                 {
                     roleName = "Admin";
                 }
@@ -61,17 +61,17 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeAdmin(string id)
         {
-            var user = await this._context.Users.FindAsync(id);
+            var user = await this.context.Users.FindAsync(id);
 
-            if (await this._userManager.IsInRoleAsync(user, GlobalConstants.SuperAdministratorRoleName))
+            if (await this.userManager.IsInRoleAsync(user, GlobalConstants.SuperAdministratorRoleName))
             {
-                if (await this._userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName))
+                if (await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName))
                 {
-                    await this._userManager.RemoveFromRoleAsync(user, GlobalConstants.AdministratorRoleName);
+                    await this.userManager.RemoveFromRoleAsync(user, GlobalConstants.AdministratorRoleName);
                 }
                 else
                 {
-                    await this._userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
+                    await this.userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
                 }
             }
 
@@ -82,14 +82,14 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await this._context.Users.FindAsync(id);
+            var user = await this.context.Users.FindAsync(id);
 
-            if (!await this._userManager.IsInRoleAsync(user, GlobalConstants.SuperAdministratorRoleName))
+            if (!await this.userManager.IsInRoleAsync(user, GlobalConstants.SuperAdministratorRoleName))
             {
                 user.IsDeleted = true;
                 user.DeletedOn = DateTime.Now.AddHours(-3);
 
-                await this._context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
 
             return this.RedirectToAction(nameof(this.Index));

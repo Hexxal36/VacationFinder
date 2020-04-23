@@ -12,16 +12,16 @@
 
     public class HotelReviewController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         public HotelReviewController(ApplicationDbContext context)
         {
-            this._context = context;
+            this.context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this._context.HotelReviews.ToListAsync());
+            return this.View(await this.context.HotelReviews.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -31,7 +31,7 @@
                 return this.NotFound();
             }
 
-            var review = await this._context.HotelReviews
+            var review = await this.context.HotelReviews
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (review == null)
             {
@@ -48,7 +48,7 @@
                 return this.NotFound();
             }
 
-            HotelReview review = await this._context.HotelReviews
+            HotelReview review = await this.context.HotelReviews
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (review == null)
             {
@@ -63,10 +63,10 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var review = await this._context.HotelReviews.FindAsync(id);
+            var review = await this.context.HotelReviews.FindAsync(id);
             review.IsDeleted = true;
             review.DeletedOn = DateTime.Now.AddHours(-3);
-            await this._context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
@@ -77,7 +77,7 @@
                 return this.NotFound();
             }
 
-            var review = await this._context.HotelReviews.FindAsync(id);
+            var review = await this.context.HotelReviews.FindAsync(id);
             if (review == null)
             {
                 return this.NotFound();
@@ -99,8 +99,8 @@
             {
                 try
                 {
-                    this._context.Update(review);
-                    await this._context.SaveChangesAsync();
+                    this.context.Update(review);
+                    await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -122,7 +122,7 @@
 
         private bool HotelReviewExists(int id)
         {
-            return this._context.HotelReviews.Any(e => e.Id == id);
+            return this.context.HotelReviews.Any(e => e.Id == id);
         }
     }
 }

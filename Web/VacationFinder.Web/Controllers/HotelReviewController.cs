@@ -15,11 +15,11 @@
     [AutoValidateAntiforgeryToken]
     public class HotelReviewController : Controller
     {
-        private readonly IHotelReviewService _hotelReviewService;
+        private readonly IHotelReviewService hotelReviewService;
 
         public HotelReviewController(IHotelReviewService hotelReviewService)
         {
-            this._hotelReviewService = hotelReviewService;
+            this.hotelReviewService = hotelReviewService;
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@
 
             if (this.ModelState.IsValid)
             {
-                await this._hotelReviewService.CreateAsync(viewModel.Grade, viewModel.Title, viewModel.Body, viewModel.HotelId, userId);
+                await this.hotelReviewService.CreateAsync(viewModel.Grade, viewModel.Title, viewModel.Body, viewModel.HotelId, userId);
             }
 
             return this.RedirectToAction("Details", "Hotel", new { id = viewModel.HotelId });
@@ -40,12 +40,12 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(HotelReviewDeleteViewModel viewModel)
         {
-            var review = this._hotelReviewService.GetReviewById(viewModel.ReviewId);
+            var review = this.hotelReviewService.GetReviewById(viewModel.ReviewId);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (review.UserId == userId)
             {
-                await this._hotelReviewService.DeleteAsync(viewModel.ReviewId);
+                await this.hotelReviewService.DeleteAsync(viewModel.ReviewId);
             }
 
             return this.RedirectToAction("Details", "Hotel", new { id = viewModel.HotelId });

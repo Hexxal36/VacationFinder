@@ -14,20 +14,20 @@
 
     public class OrderController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
         private readonly IEmailSender emailSender;
 
         public OrderController(
             ApplicationDbContext context,
             IEmailSender emailSender)
         {
-            this._context = context;
+            this.context = context;
             this.emailSender = emailSender;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this._context.Orders.ToListAsync());
+            return this.View(await this.context.Orders.ToListAsync());
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -37,7 +37,7 @@
                 return this.NotFound();
             }
 
-            var order = await this._context.Orders
+            var order = await this.context.Orders
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -52,10 +52,10 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await this._context.Orders.FindAsync(id);
+            var order = await this.context.Orders.FindAsync(id);
             order.IsDeleted = true;
             order.DeletedOn = DateTime.UtcNow;
-            await this._context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
@@ -66,7 +66,7 @@
                 return this.NotFound();
             }
 
-            var order = await this._context.Orders.FindAsync(id);
+            var order = await this.context.Orders.FindAsync(id);
             if (order == null)
             {
                 return this.NotFound();
@@ -79,7 +79,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int id)
         {
-            Order order = await this._context.Orders.FindAsync(id);
+            Order order = await this.context.Orders.FindAsync(id);
 
             if (order == null)
             {
@@ -93,8 +93,8 @@
 
             order.IsApproved = true;
 
-            this._context.Update(order);
-            await this._context.SaveChangesAsync();
+            this.context.Update(order);
+            await this.context.SaveChangesAsync();
 
             await this.emailSender.SendEmailAsync(
                 EmailConstants.From,
@@ -108,7 +108,7 @@
 
         private bool OrderExists(int id)
         {
-            return this._context.Orders.Any(e => e.Id == id);
+            return this.context.Orders.Any(e => e.Id == id);
         }
     }
 }

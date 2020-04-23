@@ -106,9 +106,8 @@
                     Places = 1,
                     IsApproved = false,
                 });
-
             }
-            
+
             this.context.SaveChanges();
         }
 

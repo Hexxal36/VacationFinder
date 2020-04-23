@@ -11,19 +11,19 @@
 
     public class UserController : Controller
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderService orderService;
 
         public UserController(
              IOrderService orderService)
         {
-            this._orderService = orderService;
+            this.orderService = orderService;
         }
 
         public IActionResult ShowOrders()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var orders = this._orderService.GetAllByUser(userId);
+            var orders = this.orderService.GetAllByUser(userId);
 
             return this.View(orders);
         }

@@ -13,16 +13,16 @@
     [AutoValidateAntiforgeryToken]
     public class TransportController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         public TransportController(ApplicationDbContext context)
         {
-            this._context = context;
+            this.context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return this.View(await this._context.Transports.ToListAsync());
+            return this.View(await this.context.Transports.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -32,7 +32,7 @@
                 return this.NotFound();
             }
 
-            var transport = await this._context.Transports
+            var transport = await this.context.Transports
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (transport == null)
             {
@@ -60,8 +60,8 @@
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(transport);
-                await this._context.SaveChangesAsync();
+                this.context.Add(transport);
+                await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
@@ -76,7 +76,7 @@
                 return this.NotFound();
             }
 
-            var transport = await this._context.Transports.FindAsync(id);
+            var transport = await this.context.Transports.FindAsync(id);
             if (transport == null)
             {
                 return this.NotFound();
@@ -101,8 +101,8 @@
             {
                 try
                 {
-                    this._context.Update(transport);
-                    await this._context.SaveChangesAsync();
+                    this.context.Update(transport);
+                    await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +130,7 @@
                 return this.NotFound();
             }
 
-            var transport = await this._context.Transports
+            var transport = await this.context.Transports
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (transport == null)
             {
@@ -146,16 +146,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transport = await this._context.Transports.FindAsync(id);
+            var transport = await this.context.Transports.FindAsync(id);
             transport.IsDeleted = true;
             transport.DeletedOn = DateTime.Now.AddHours(-3);
-            await this._context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool TransportExists(int id)
         {
-            return this._context.Transports.Any(e => e.Id == id);
+            return this.context.Transports.Any(e => e.Id == id);
         }
     }
 }

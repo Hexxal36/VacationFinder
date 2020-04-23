@@ -12,28 +12,28 @@
 
     public class HotelController : Controller
     {
-        private readonly IHotelService _hotelService;
-        private readonly ICityService _cityService;
+        private readonly IHotelService hotelService;
+        private readonly ICityService cityService;
 
         public HotelController(
              IHotelService hotelService,
              ICityService cityService)
         {
-            this._hotelService = hotelService;
-            this._cityService = cityService;
+            this.hotelService = hotelService;
+            this.cityService = cityService;
         }
 
         public IActionResult Index(HotelFilterViewModel filter)
         {
-            var cities = this._cityService.GetAllCities();
+            var cities = this.cityService.GetAllCities();
 
             var viewModel = new HotelListViewModel
             {
-                Hotels = this._hotelService.GetAllHotels(),
+                Hotels = this.hotelService.GetAllHotels(),
                 Cities = cities,
             };
 
-            viewModel.Hotels = this._hotelService.FilterHotels(filter.Name, filter.Stars, filter.City);
+            viewModel.Hotels = this.hotelService.FilterHotels(filter.Name, filter.Stars, filter.City);
 
             return this.View(viewModel);
         }
@@ -42,7 +42,7 @@
         {
             try
             {
-                var hotel = this._hotelService.GetHotelById(id);
+                var hotel = this.hotelService.GetHotelById(id);
                 var reviews = hotel.HotelReviews;
 
                 var viewModel = new HotelViewModel

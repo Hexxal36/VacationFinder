@@ -13,16 +13,16 @@
     [AutoValidateAntiforgeryToken]
     public class OfferImageController : AdministrationController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         public OfferImageController(ApplicationDbContext context)
         {
-            this._context = context;
+            this.context = context;
         }
 
         public async Task<IActionResult> Create()
         {
-            this.ViewBag.Offers = await this._context.Offers.ToListAsync();
+            this.ViewBag.Offers = await this.context.Offers.ToListAsync();
 
             return this.View();
         }
@@ -36,12 +36,12 @@
 
             if (this.ModelState.IsValid)
             {
-                this._context.Add(offerImg);
-                await this._context.SaveChangesAsync();
+                this.context.Add(offerImg);
+                await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Create));
             }
 
-            this.ViewBag.Offers = await this._context.Offers.ToListAsync();
+            this.ViewBag.Offers = await this.context.Offers.ToListAsync();
 
             return this.View(offerImg);
         }
@@ -53,7 +53,7 @@
                 return this.NotFound();
             }
 
-            var offerImg = await this._context.OfferImages
+            var offerImg = await this.context.OfferImages
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (offerImg == null)
             {
@@ -68,12 +68,12 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var offerImg = await this._context.OfferImages.FindAsync(id);
+            var offerImg = await this.context.OfferImages.FindAsync(id);
             offerImg.IsDeleted = true;
             offerImg.DeletedOn = DateTime.Now.AddHours(-3);
             var offerId = offerImg.OfferId;
 
-            await this._context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
             return this.RedirectToAction("Details", "Offer", new { area = "Administration", id = offerId });
         }
     }
